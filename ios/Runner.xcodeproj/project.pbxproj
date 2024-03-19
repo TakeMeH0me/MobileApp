@@ -16,6 +16,10 @@
 		97C146FC1CF9000F007C117D /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 97C146FA1CF9000F007C117D /* Main.storyboard */; };
 		97C146FE1CF9000F007C117D /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 97C146FD1CF9000F007C117D /* Assets.xcassets */; };
 		97C147011CF9000F007C117D /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 97C146FF1CF9000F007C117D /* LaunchScreen.storyboard */; };
+		E8ACB3672BA97E8D00D34128 /* types.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8ACB3652BA97E8D00D34128 /* types.swift */; };
+		E8ACB36A2BA97EAF00D34128 /* routeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8ACB3682BA97EAF00D34128 /* routeView.swift */; };
+		E8ACB36D2BA97EDC00D34128 /* routePartView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8ACB36B2BA97EDC00D34128 /* routePartView.swift */; };
+		E8ACB3702BA97F0900D34128 /* timelineView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8ACB36E2BA97F0900D34128 /* timelineView.swift */; };
 		E8E9B83D2B8351C200200435 /* WidgetKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E8E9B83C2B8351C200200435 /* WidgetKit.framework */; };
 		E8E9B83F2B8351C200200435 /* SwiftUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E8E9B83E2B8351C200200435 /* SwiftUI.framework */; };
 		E8E9B8422B8351C200200435 /* takeMeHomeWidgetBundle.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8E9B8412B8351C200200435 /* takeMeHomeWidgetBundle.swift */; };
@@ -89,6 +93,10 @@
 		97C147021CF9000F007C117D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		AE4FCAE464D8FB2E44DC0E00 /* Pods-RunnerTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RunnerTests.release.xcconfig"; path = "Target Support Files/Pods-RunnerTests/Pods-RunnerTests.release.xcconfig"; sourceTree = "<group>"; };
 		D43A70D69B02C0749660ED93 /* Pods_RunnerTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_RunnerTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		E8ACB3652BA97E8D00D34128 /* types.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = types.swift; sourceTree = "<group>"; };
+		E8ACB3682BA97EAF00D34128 /* routeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = routeView.swift; sourceTree = "<group>"; };
+		E8ACB36B2BA97EDC00D34128 /* routePartView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = routePartView.swift; sourceTree = "<group>"; };
+		E8ACB36E2BA97F0900D34128 /* timelineView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = timelineView.swift; sourceTree = "<group>"; };
 		E8E9B83A2B8351C200200435 /* takeMeHomeWidgetExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = takeMeHomeWidgetExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		E8E9B83C2B8351C200200435 /* WidgetKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WidgetKit.framework; path = System/Library/Frameworks/WidgetKit.framework; sourceTree = SDKROOT; };
 		E8E9B83E2B8351C200200435 /* SwiftUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftUI.framework; path = System/Library/Frameworks/SwiftUI.framework; sourceTree = SDKROOT; };
@@ -219,6 +227,10 @@
 				E8E9B8432B8351C200200435 /* takeMeHomeWidget.swift */,
 				E8E9B8452B8351C300200435 /* Assets.xcassets */,
 				E8E9B8472B8351C300200435 /* Info.plist */,
+				E8ACB3652BA97E8D00D34128 /* types.swift */,
+				E8ACB3682BA97EAF00D34128 /* routeView.swift */,
+				E8ACB36B2BA97EDC00D34128 /* routePartView.swift */,
+				E8ACB36E2BA97F0900D34128 /* timelineView.swift */,
 			);
 			path = takeMeHomeWidget;
 			sourceTree = "<group>";
@@ -476,6 +488,10 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E8ACB36A2BA97EAF00D34128 /* routeView.swift in Sources */,
+				E8ACB3702BA97F0900D34128 /* timelineView.swift in Sources */,
+				E8ACB3672BA97E8D00D34128 /* types.swift in Sources */,
+				E8ACB36D2BA97EDC00D34128 /* routePartView.swift in Sources */,
 				E8E9B8422B8351C200200435 /* takeMeHomeWidgetBundle.swift in Sources */,
 				E8E9B8442B8351C200200435 /* takeMeHomeWidget.swift in Sources */,
 			);

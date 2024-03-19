@@ -8,31 +8,66 @@
 import WidgetKit
 import SwiftUI
 
-struct Provider: TimelineProvider {
-    func placeholder(in context: Context) -> RouteInformation {
-        RouteInformation(date: Date(), currentTime: Date(), route: [])
+struct Provider: TimelineProvider
+{
+    func placeholder(in context: Context) -> RouteInformation
+    {
+        RouteInformation(date: Date(), route: [])
     }
 
-    func getSnapshot(in context: Context, completion: @escaping (RouteInformation) -> ()) {
-        let entry = RouteInformation(date: Date(), currentTime: Date(), route: [])
+    func getSnapshot(in context: Context, completion: @escaping (RouteInformation) -> ())
+    {
+        let entry = RouteInformation(date: Date(), route: [])
         completion(entry)
     }
-
-    func getTimeline(in context: Context, completion: @escaping (Timeline<Entry>) -> ()) {
+    
+    func getTimeline(in context: Context, completion: @escaping (Timeline<Entry>) -> ())
+    {
         var entries: [RouteInformation] = []
 
         // Generate a timeline consisting of five entries an hour apart, starting from the current date.
         let currentDate = Date()
-        for hourOffset in 0 ..< 5 {
-            let entryDate = Calendar.current.date(byAdding: .hour, value: hourOffset, to: currentDate)!
-            let entry = RouteInformation(date: .now,
-                                         currentTime: .now,
+        for hourOffset in 0 ..< 5
+        {
+            // let entryDate = Calendar.current.date(byAdding: .hour, value: hourOffset, to: currentDate)!
+            let entry = RouteInformation(date: Date(timeIntervalSince1970: 1708526700),
                                          route:
                                             [
-                                                RoutePart(from: .now,
-                                                          to: .now.addingTimeInterval(100000),
-                                                          vehicle: Vehicle.train,
-                                                          lineName: "RE3")
+                                                RoutePart(vehicle: VehicleType.tram,
+                                                          lineName: "3",
+                                                          lineDestination: "Friedrich Engels Straße",
+                                                          entrance: "DHGE",
+                                                          entranceTime: Date(timeIntervalSince1970: 1708523280),
+                                                          exit: "Friedrich Engels Straße",
+                                                          exitTime: Date(timeIntervalSince1970: 1708524000)),
+                                                RoutePart(vehicle: VehicleType.walk,
+                                                          lineName: "",
+                                                          lineDestination: "",
+                                                          entrance: "Friedrich Engels Straße",
+                                                          entranceTime: Date(timeIntervalSince1970: 1708524000),
+                                                          exit: "Gera Hbf",
+                                                          exitTime: Date(timeIntervalSince1970: 1708524300)),
+                                                RoutePart(vehicle: VehicleType.train,
+                                                          lineName: "RE1",
+                                                          lineDestination: "Göttingen",
+                                                          entrance: "Gera Hbf",
+                                                          entranceTime: Date(timeIntervalSince1970: 1708524300),
+                                                          exit: "Erfurt Hbf",
+                                                          exitTime: Date(timeIntervalSince1970: 1708526700)),
+                                                RoutePart(vehicle: VehicleType.tram,
+                                                          lineName: "5",
+                                                          lineDestination: "Zoopark",
+                                                          entrance: "Erfurt Hbf",
+                                                          entranceTime: Date(timeIntervalSince1970: 1708526700),
+                                                          exit: "Lutherkirche",
+                                                          exitTime: Date(timeIntervalSince1970: 1708527300)),
+                                                RoutePart(vehicle: VehicleType.walk,
+                                                          lineName: "",
+                                                          lineDestination: "",
+                                                          entrance: "Lutherkirche",
+                                                          entranceTime: Date(timeIntervalSince1970: 1708527300),
+                                                          exit: "Schobersmühlenweg",
+                                                          exitTime: Date(timeIntervalSince1970: 1708527600)),
                                             ])
             entries.append(entry)
         }
@@ -42,75 +77,101 @@ struct Provider: TimelineProvider {
     }
 }
 
-struct RouteInformation: TimelineEntry {
-    let date: Date
-    let currentTime: Date
-    let route: [RoutePart]
-}
-
-struct RoutePart {
-    let from: Date
-    let to: Date
-    let vehicle: Vehicle
-    let lineName: String
-}
-
-enum Vehicle {
-  case unknown
-  case walk
-  case train
-  case bus
-}
-
-
-struct takeMeHomeWidgetEntryView : View {
-    var routeInformation: Provider.Entry
-
-    var body: some View {
-        HStack {
-            VStack
+struct takeMeHomeWidgetEntryView : View
+{
+    var routeInformation: RouteInformation?
+    
+    var body: some View
+    {
+        if (routeInformation != nil)
+        {
+            HStack
             {
-                Text((routeInformation.route.first?.from ?? Date.now).formatted(.dateTime.hour().minute())).bold()
+                TimelineView(from: routeInformation?.route.first?.entranceTime ?? .now,
+                         to: routeInformation?.route.last?.exitTime ?? .now,
+                             actual: routeInformation?.date ?? .now)
                 Spacer()
-                Image(systemName: "arrowshape.down.fill")
+                RouteView(routeInformation: routeInformation!)
                 Spacer()
-                Text((routeInformation.route.last?.to ?? Date.now).formatted(.dateTime.hour().minute())).bold()
             }
-            Spacer()
+        }
+        else
+        {
+            Text("No Route")
         }
     }
 }
 
-struct takeMeHomeWidget: Widget {
-    let kind: String = "takeMeHomeWidget"
+struct takeMeHomeWidget: Widget
+{
+    let kind: String = "takeMeHomeWidgetDevWidget"
 
-    var body: some WidgetConfiguration {
-        StaticConfiguration(kind: kind, provider: Provider()) { entry in
-            if #available(iOS 17.0, *) {
+    var body: some WidgetConfiguration
+    {
+        StaticConfiguration(kind: kind, provider: Provider())
+        { entry in
+            if #available(iOS 17.0, *)
+            {
                 takeMeHomeWidgetEntryView(routeInformation: entry)
                     .containerBackground(.fill.tertiary, for: .widget)
-            } else {
+            }
+            else
+            {
                 takeMeHomeWidgetEntryView(routeInformation: entry)
                     .padding()
                     .background()
             }
         }
-        .configurationDisplayName("My Widget")
-        .description("This is an example widget.")
+        .configurationDisplayName("Route View")
+        .description("This widget is showing your route.")
+        .supportedFamilies([.systemLarge])
     }
 }
 
-#Preview(as: .systemSmall) {
+#Preview(as: .systemSmall)
+{
     takeMeHomeWidget()
-} timeline: {
-    RouteInformation(date: .now,
-                     currentTime: .now,
-                     route: 
+}
+timeline:
+{
+    RouteInformation(date: Date(timeIntervalSince1970: 1708524000),
+                     route:
                         [
-                            RoutePart(from: .now,
-                                      to: .now.addingTimeInterval(100000),
-                                      vehicle: Vehicle.train,
-                                      lineName: "RE3")
+                            RoutePart(vehicle: VehicleType.tram,
+                                      lineName: "3",
+                                      lineDestination: "Friedrich Engels Straße",
+                                      entrance: "DHGE",
+                                      entranceTime: Date(timeIntervalSince1970: 1708523280),
+                                      exit: "Friedrich Engels Straße",
+                                      exitTime: Date(timeIntervalSince1970: 1708524000)),
+                            RoutePart(vehicle: VehicleType.walk,
+                                      lineName: "",
+                                      lineDestination: "",
+                                      entrance: "Friedrich Engels Straße",
+                                      entranceTime: Date(timeIntervalSince1970: 1708524000),
+                                      exit: "Gera Hbf",
+                                      exitTime: Date(timeIntervalSince1970: 1708524300)),
+                            RoutePart(vehicle: VehicleType.train,
+                                      lineName: "RE1",
+                                      lineDestination: "Göttingen",
+                                      entrance: "Gera Hbf",
+                                      entranceTime: Date(timeIntervalSince1970: 1708524300),
+                                      exit: "Erfurt Hbf",
+                                      exitTime: Date(timeIntervalSince1970: 1708526700)),
+                            RoutePart(vehicle: VehicleType.tram,
+                                      lineName: "5",
+                                      lineDestination: "Zoopark",
+                                      entrance: "Erfurt Hbf",
+                                      entranceTime: Date(timeIntervalSince1970: 1708526700),
+                                      exit: "Lutherkirche",
+                                      exitTime: Date(timeIntervalSince1970: 1708527300)),
+                            RoutePart(vehicle: VehicleType.walk,
+                                      lineName: "",
+                                      lineDestination: "",
+                                      entrance: "Lutherkirche",
+                                      entranceTime: Date(timeIntervalSince1970: 1708527300),
+                                      exit: "Schobersmühlenweg",
+                                      exitTime: Date(timeIntervalSince1970: 1708527600)),
                         ]
     )
 }
