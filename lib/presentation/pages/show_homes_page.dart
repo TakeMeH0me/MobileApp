@@ -5,7 +5,6 @@ import 'package:take_me_home/presentation/bloc/home/home_bloc.dart';
 import 'package:take_me_home/presentation/router/app_router.dart';
 import 'package:take_me_home/presentation/router/args/create_or_edit_home_args.dart';
 import 'package:take_me_home/presentation/router/args/show_way_to_home_args.dart';
-import 'package:take_me_home/presentation/widgets/current_location_card.dart';
 import 'package:take_me_home/presentation/widgets/home_button_widget.dart';
 
 /// Shows all created homes.
@@ -34,7 +33,21 @@ class _ShowHomesPageState extends State<ShowHomesPage> {
         child: Scrollbar(
           child: SingleChildScrollView(
             physics: const AlwaysScrollableScrollPhysics(),
-            child: Center(child: _buildHomeWidgets(context)),
+            child: Center(
+                child: Column(
+              children: [
+                _buildHomeWidgets(context),
+                const SizedBox(height: 50.0),
+                StreamBuilder(
+                    stream: BlocProvider.of<HomeBloc>(context).homeStream2.,
+                    builder: (context, snapshot) {
+                      return snapshot.hasData
+                          ? Text(
+                              'Current homes: ${(snapshot.data as List<HomeEntity>).length}')
+                          : const CircularProgressIndicator();
+                    }),
+              ],
+            )),
           ),
         ),
       ),
@@ -125,7 +138,7 @@ class _ShowHomesPageState extends State<ShowHomesPage> {
 
   void _sendDeleteHome(HomeEntity home) {
     BlocProvider.of<HomeBloc>(context).add(
-      DeleteHomeEvent(id: home.id),
+      DeleteHomeEvent(home: home),
     );
 
     _sendGetAllHomes();

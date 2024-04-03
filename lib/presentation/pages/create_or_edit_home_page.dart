@@ -154,7 +154,6 @@ class _CreateOrEditHomePageState extends State<CreateOrEditHomePage> {
           }
 
           Navigator.of(context).pop();
-          _sendGetAllHomes();
         },
         child: const Icon(Icons.save),
       ),
@@ -164,12 +163,6 @@ class _CreateOrEditHomePageState extends State<CreateOrEditHomePage> {
   void _sendCreateHome() {
     BlocProvider.of<HomeBloc>(context).add(
       CreateHomeEvent(home: currentHome),
-    );
-  }
-
-  void _sendGetAllHomes() {
-    BlocProvider.of<HomeBloc>(context).add(
-      GetAllHomesEvent(),
     );
   }
 

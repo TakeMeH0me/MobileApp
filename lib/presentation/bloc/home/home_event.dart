@@ -28,10 +28,10 @@ final class UpdateHomeEvent extends HomeEvent {
 }
 
 final class DeleteHomeEvent extends HomeEvent {
-  final String id;
+  final HomeEntity home;
 
-  const DeleteHomeEvent({required this.id});
+  const DeleteHomeEvent({required this.home});
 
   @override
-  List<Object> get props => [id];
+  List<Object> get props => [home];
 }

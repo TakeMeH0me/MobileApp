@@ -11,14 +11,7 @@ final class HomeEmpty extends HomeState {}
 
 final class CreateHomeFetching extends HomeState {}
 
-final class CreateHomeSuccess extends HomeState {
-  final HomeEntity home;
-
-  const CreateHomeSuccess({required this.home});
-
-  @override
-  List<Object> get props => [home];
-}
+final class CreateHomeSuccess extends HomeState {}
 
 final class CreateHomeError extends HomeState {
   final String message;
@@ -64,14 +57,7 @@ final class DeleteHomeError extends HomeState {
 
 final class UpdateHomeFetching extends HomeState {}
 
-final class UpdateHomeSuccess extends HomeState {
-  final HomeEntity home;
-
-  const UpdateHomeSuccess({required this.home});
-
-  @override
-  List<Object> get props => [home];
-}
+final class UpdateHomeSuccess extends HomeState {}
 
 final class UpdateHomeError extends HomeState {
   final String message;
