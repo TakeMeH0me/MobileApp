@@ -11,27 +11,24 @@ part 'home_state.dart';
 
 class HomeBloc extends Bloc<HomeEvent, HomeState> {
   final HomeRepository homeRepository;
-  List<HomeEntity> currentHomes = [];
-  StreamSubscription<List<HomeEntity>>? homeStream2;
+  final StreamController<List<HomeEntity>> homesStreamController =
+      StreamController<List<HomeEntity>>();
 
   HomeBloc({required this.homeRepository}) : super(HomeEmpty()) {
-    test();
+    _initHomesStream();
 
     on<CreateHomeEvent>(_handleCreateHome);
-    on<GetAllHomesEvent>(_handleGetAllHomes);
     on<UpdateHomeEvent>(_handleUpdateHome);
     on<DeleteHomeEvent>(_handleDeleteHome);
   }
 
-  void test() async {
+  Stream<List<HomeEntity>> get homeListStream => homesStreamController.stream;
+
+  void _initHomesStream() async {
     final result = await homeRepository.getAllHomes();
     result.fold(
       (failure) => print('Error while fetching homes.'),
-      (homeStream) async {
-        homeStream2 = homeStream.listen((homes) {
-          currentHomes = homes;
-        });
-      },
+      (homes) => homesStreamController.addStream(homes),
     );
   }
 
@@ -47,20 +44,6 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
           emit(const CreateHomeError(message: 'Error while creating home.')),
       (_) => emit(CreateHomeSuccess()),
     );
-  }
-
-  FutureOr<void> _handleGetAllHomes(
-    GetAllHomesEvent event,
-    Emitter<HomeState> emit,
-  ) async {
-    emit(GetAllHomesFetching());
-
-    if (currentHomes.isEmpty) {
-      emit(const GetAllHomesError(message: 'No homes found. Create One!'));
-      return;
-    }
-
-    emit(GetAllHomesSuccess(homes: currentHomes));
   }
 
   FutureOr<void> _handleUpdateHome(

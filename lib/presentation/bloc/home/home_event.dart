@@ -16,8 +16,6 @@ final class CreateHomeEvent extends HomeEvent {
   List<Object> get props => [home];
 }
 
-final class GetAllHomesEvent extends HomeEvent {}
-
 final class UpdateHomeEvent extends HomeEvent {
   final HomeEntity home;
 

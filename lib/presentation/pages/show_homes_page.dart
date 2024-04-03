@@ -17,59 +17,32 @@ class ShowHomesPage extends StatefulWidget {
 
 class _ShowHomesPageState extends State<ShowHomesPage> {
   @override
-  void initState() {
-    super.initState();
-    _sendGetAllHomes();
-  }
-
-  @override
   Widget build(BuildContext context) {
-    return RefreshIndicator(
-      onRefresh: () async {
-        _sendGetAllHomes();
-      },
-      child: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Scrollbar(
-          child: SingleChildScrollView(
-            physics: const AlwaysScrollableScrollPhysics(),
-            child: Center(
-                child: Column(
-              children: [
-                _buildHomeWidgets(context),
-                const SizedBox(height: 50.0),
-                StreamBuilder(
-                    stream: BlocProvider.of<HomeBloc>(context).homeStream2.,
-                    builder: (context, snapshot) {
-                      return snapshot.hasData
-                          ? Text(
-                              'Current homes: ${(snapshot.data as List<HomeEntity>).length}')
-                          : const CircularProgressIndicator();
-                    }),
-              ],
-            )),
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: Scrollbar(
+        child: SingleChildScrollView(
+          physics: const AlwaysScrollableScrollPhysics(),
+          child: Center(
+            child: _buildHomeWidgets(context),
           ),
         ),
       ),
     );
   }
 
-  BlocBuilder<HomeBloc, HomeState> _buildHomeWidgets(BuildContext context) {
-    return BlocBuilder<HomeBloc, HomeState>(
-      buildWhen: (previous, current) =>
-          current is HomeEmpty ||
-          current is GetAllHomesFetching ||
-          current is GetAllHomesSuccess ||
-          current is GetAllHomesError,
-      builder: (context, state) {
-        if (state is GetAllHomesFetching) {
-          return const CircularProgressIndicator();
-        } else if (state is GetAllHomesSuccess) {
-          return Column(children: _buildHomesList(state.homes));
-        } else if (state is GetAllHomesError) {
-          return Text(state.message);
+  StreamBuilder<List<HomeEntity>> _buildHomeWidgets(BuildContext context) {
+    return StreamBuilder<List<HomeEntity>>(
+      stream: BlocProvider.of<HomeBloc>(context).homeListStream,
+      builder: (context, snapshot) {
+        if (snapshot.hasData) {
+          return Column(
+            children: _buildHomesList(snapshot.data!),
+          );
+        } else if (snapshot.hasError) {
+          return Text(snapshot.error.toString());
         } else {
-          return const Text('No homes found. Create one!');
+          return const CircularProgressIndicator();
         }
       },
     );
@@ -140,19 +113,5 @@ class _ShowHomesPageState extends State<ShowHomesPage> {
     BlocProvider.of<HomeBloc>(context).add(
       DeleteHomeEvent(home: home),
     );
-
-    _sendGetAllHomes();
   }
-
-  void _sendGetAllHomes() {
-    BlocProvider.of<HomeBloc>(context).add(
-      GetAllHomesEvent(),
-    );
-  }
-}
-
-TimeOfDay onResultRecieved(dynamic result) {
-  TimeOfDay time = TimeOfDay(hour: result.hour, minute: result.minute);
-
-  return time;
 }

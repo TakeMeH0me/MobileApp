@@ -22,26 +22,6 @@ final class CreateHomeError extends HomeState {
   List<Object> get props => [message];
 }
 
-final class GetAllHomesFetching extends HomeState {}
-
-final class GetAllHomesSuccess extends HomeState {
-  final List<HomeEntity> homes;
-
-  const GetAllHomesSuccess({required this.homes});
-
-  @override
-  List<Object> get props => [homes];
-}
-
-final class GetAllHomesError extends HomeState {
-  final String message;
-
-  const GetAllHomesError({required this.message});
-
-  @override
-  List<Object> get props => [message];
-}
-
 final class DeleteHomeFetching extends HomeState {}
 
 final class DeleteHomeSuccess extends HomeState {}
