@@ -30,7 +30,7 @@ class _CurrentLocationCardState extends State<CurrentLocationCard> {
   @override
   Widget build(BuildContext context) {
     return Card(
-      color: lightColorScheme.secondary,
+      color: lightColorTheme.colorScheme.secondary,
       child: SizedBox(
         width: MediaQuery.of(context).size.width * 0.90,
         child: ListTile(

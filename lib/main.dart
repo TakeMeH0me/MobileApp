@@ -36,8 +36,8 @@ class MainApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       initialRoute: AppRouter.root,
       onGenerateRoute: (settings) => appRouter.onGenerateRoute(settings),
-      darkTheme: ThemeData(colorScheme: darkColorScheme),
-      theme: ThemeData(colorScheme: lightColorScheme),
+      darkTheme: darkoColorTheme,
+      theme: lightColorTheme,
     );
   }
 }

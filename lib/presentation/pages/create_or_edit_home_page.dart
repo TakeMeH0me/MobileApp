@@ -79,7 +79,7 @@ class _CreateOrEditHomePageState extends State<CreateOrEditHomePage> {
                     children: [
                       const SizedBox(height: 10.0),
                       Card(
-                        color: lightColorScheme.surface,
+                        color: lightColorTheme.colorScheme.surface,
                         child: ListTile(
                           title: TextField(
                             controller: _homeNameController,
@@ -91,7 +91,7 @@ class _CreateOrEditHomePageState extends State<CreateOrEditHomePage> {
                       ),
                       const SizedBox(height: 10.0),
                       Card(
-                          color: lightColorScheme.surface,
+                          color: lightColorTheme.colorScheme.surface,
                           child: ListTile(
                             title: TextField(
                               controller: _streetController,
@@ -102,7 +102,7 @@ class _CreateOrEditHomePageState extends State<CreateOrEditHomePage> {
                           )),
                       const SizedBox(height: 10.0),
                       Card(
-                          color: lightColorScheme.surface,
+                          color: lightColorTheme.colorScheme.surface,
                           child: ListTile(
                             title: TextField(
                               controller: _streetNumberController,
@@ -114,7 +114,7 @@ class _CreateOrEditHomePageState extends State<CreateOrEditHomePage> {
                           )),
                       const SizedBox(height: 10.0),
                       Card(
-                          color: lightColorScheme.surface,
+                          color: lightColorTheme.colorScheme.surface,
                           child: ListTile(
                             title: TextField(
                               controller: _postcodeController,
