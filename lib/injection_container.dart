@@ -5,6 +5,7 @@ import 'package:http/http.dart' as http;
 import 'package:take_me_home/data/data_sources/station_remote_data_source.dart';
 import 'package:take_me_home/data/repository/station_repository_impl.dart';
 import 'package:take_me_home/domain/repository/station_repository.dart';
+import 'package:take_me_home/presentation/bloc/home/home_bloc.dart';
 import 'package:take_me_home/presentation/bloc/station/station_bloc.dart';
 
 import 'package:take_me_home/presentation/router/app_router.dart';
@@ -15,6 +16,7 @@ Future<void> init() async {
   sl.registerLazySingleton<StationBloc>(() => StationBloc(
         stationRepository: sl(),
       ));
+  sl.registerLazySingleton<HomeBloc>(() => HomeBloc());
 
   sl.registerLazySingleton<StationRepository>(() => StationRepositoryImpl(
         remoteDataSource: sl(),

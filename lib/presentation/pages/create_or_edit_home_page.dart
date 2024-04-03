@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:take_me_home/domain/entities/home_entity.dart';
+import 'package:take_me_home/presentation/bloc/home/home_bloc.dart';
 import 'package:take_me_home/presentation/theme/color_themes.dart';
 
 /// A home can be created ([isEditing] = false) or edited ([isEditing] = true) with this page.
@@ -44,7 +46,6 @@ class _CreateOrEditHomePageState extends State<CreateOrEditHomePage> {
   void initState() {
     super.initState();
 
-    //instead of onChanged in Textfield
     _homeNameController.addListener(_onHomeNameChanged);
     _streetController.addListener(_onStreetChanged);
     _streetNumberController.addListener(_onNumberChanged);
@@ -146,10 +147,35 @@ class _CreateOrEditHomePageState extends State<CreateOrEditHomePage> {
       padding: const EdgeInsets.all(20.0),
       child: ElevatedButton(
         onPressed: () {
-          Navigator.of(context).pop(currentHome);
+          if (widget.isNewHome) {
+            _sendCreateHome();
+          } else {
+            _sendUpdateHome();
+          }
+
+          Navigator.of(context).pop();
+          _sendGetAllHomes();
         },
         child: const Icon(Icons.save),
       ),
+    );
+  }
+
+  void _sendCreateHome() {
+    BlocProvider.of<HomeBloc>(context).add(
+      CreateHomeEvent(home: currentHome),
+    );
+  }
+
+  void _sendGetAllHomes() {
+    BlocProvider.of<HomeBloc>(context).add(
+      GetAllHomesEvent(),
+    );
+  }
+
+  void _sendUpdateHome() {
+    BlocProvider.of<HomeBloc>(context).add(
+      UpdateHomeEvent(home: currentHome),
     );
   }
 

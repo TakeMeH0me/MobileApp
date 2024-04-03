@@ -34,6 +34,10 @@ class _ShowWayToHomePageState extends State<ShowWayToHomePage> {
   @override
   void initState() {
     super.initState();
+    _initDefaultMeansOfTransport();
+  }
+
+  void _initDefaultMeansOfTransport() {
     BlocProvider.of<StationBloc>(context).add(
       GetMeansOfTransportByTime(
         _startStation,
@@ -63,66 +67,73 @@ class _ShowWayToHomePageState extends State<ShowWayToHomePage> {
                   style: const TextStyle(fontSize: 30),
                 ),
                 const SizedBox(height: 10),
-                BlocBuilder<StationBloc, StationState>(
-                  builder: (context, state) {
-                    if (state is StationLoading) {
-                      return const Center(child: CircularProgressIndicator());
-                    } else if (state is StationError) {
-                      return Text(state.message);
-                    } else if (state is StationsUpdated) {
-                      final TimeOfDay time =
-                          state.meansOfTransportEntities[0].departureTime;
-                      return Text(
-                        'Du musst in loslaufen ${time.hour - TimeOfDay.now().hour}h und ${time.minute - TimeOfDay.now().minute}min .${time.toString()}',
-                        style: const TextStyle(fontSize: 16),
-                      );
-                    } else {
-                      return const SizedBox.shrink();
-                    }
-                  },
-                ),
+                _buildTimeIndicator(),
                 const SizedBox(height: 10),
-                BlocBuilder<StationBloc, StationState>(
-                  builder: (context, state) {
-                    if (state is StationLoading) {
-                      return const Center(child: CircularProgressIndicator());
-                    } else if (state is StationError) {
-                      return Text(state.message);
-                    } else if (state is StationsUpdated) {
-                      return Column(
-                        children: state.meansOfTransportEntities
-                            .map(
-                              (meansOfTransportEntity) => Column(
-                                children: [
-                                  Text(
-                                    meansOfTransportEntity.name,
-                                    style: const TextStyle(fontSize: 20),
-                                  ),
-                                  Text(
-                                    '${meansOfTransportEntity.departureTime.hour}:${meansOfTransportEntity.departureTime.minute}',
-                                    style: const TextStyle(fontSize: 16),
-                                  ),
-                                  Text(
-                                    meansOfTransportEntity.delayInMinutes
-                                        .toString(),
-                                    style: const TextStyle(fontSize: 16),
-                                  ),
-                                  const SizedBox(height: 10),
-                                ],
-                              ),
-                            )
-                            .toList(),
-                      );
-                    } else {
-                      return const SizedBox.shrink();
-                    }
-                  },
-                ),
+                _buildRouteList(),
               ],
             ),
           ),
         ),
       ),
+    );
+  }
+
+  BlocBuilder<StationBloc, StationState> _buildTimeIndicator() {
+    return BlocBuilder<StationBloc, StationState>(
+      builder: (context, state) {
+        if (state is StationLoading) {
+          return const Center(child: CircularProgressIndicator());
+        } else if (state is StationError) {
+          return Text(state.message);
+        } else if (state is StationsUpdated) {
+          final TimeOfDay time =
+              state.meansOfTransportEntities[0].departureTime;
+          return Text(
+            'Du musst in loslaufen ${time.hour - TimeOfDay.now().hour}h und ${time.minute - TimeOfDay.now().minute}min .${time.toString()}',
+            style: const TextStyle(fontSize: 16),
+          );
+        } else {
+          return const SizedBox.shrink();
+        }
+      },
+    );
+  }
+
+  BlocBuilder<StationBloc, StationState> _buildRouteList() {
+    return BlocBuilder<StationBloc, StationState>(
+      builder: (context, state) {
+        if (state is StationLoading) {
+          return const Center(child: CircularProgressIndicator());
+        } else if (state is StationError) {
+          return Text(state.message);
+        } else if (state is StationsUpdated) {
+          return Column(
+            children: state.meansOfTransportEntities
+                .map(
+                  (meansOfTransportEntity) => Column(
+                    children: [
+                      Text(
+                        meansOfTransportEntity.name,
+                        style: const TextStyle(fontSize: 20),
+                      ),
+                      Text(
+                        '${meansOfTransportEntity.departureTime.hour}:${meansOfTransportEntity.departureTime.minute}',
+                        style: const TextStyle(fontSize: 16),
+                      ),
+                      Text(
+                        meansOfTransportEntity.delayInMinutes.toString(),
+                        style: const TextStyle(fontSize: 16),
+                      ),
+                      const SizedBox(height: 10),
+                    ],
+                  ),
+                )
+                .toList(),
+          );
+        } else {
+          return const SizedBox.shrink();
+        }
+      },
     );
   }
 }

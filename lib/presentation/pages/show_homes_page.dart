@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:take_me_home/domain/entities/home_entity.dart';
-import 'package:take_me_home/presentation/router/args/create_or_edit_home_args.dart';
+import 'package:take_me_home/presentation/bloc/home/home_bloc.dart';
 import 'package:take_me_home/presentation/router/app_router.dart';
+import 'package:take_me_home/presentation/router/args/create_or_edit_home_args.dart';
 import 'package:take_me_home/presentation/router/args/show_way_to_home_args.dart';
 import 'package:take_me_home/presentation/widgets/current_location_card.dart';
-import 'package:take_me_home/presentation/widgets/widgets.dart';
+import 'package:take_me_home/presentation/widgets/home_button_widget.dart';
 
 /// Shows all created homes.
 class ShowHomesPage extends StatefulWidget {
@@ -15,46 +17,11 @@ class ShowHomesPage extends StatefulWidget {
 }
 
 class _ShowHomesPageState extends State<ShowHomesPage> {
-  void _deleteHome(String id) {
-    setState(() {
-      _homes.removeWhere((home) => home.id == id);
-    });
+  @override
+  void initState() {
+    super.initState();
+    _sendGetAllHomes();
   }
-
-  final List<HomeEntity> _homes = [
-    const HomeEntity(
-      id: '1',
-      name: 'Freundin',
-      city: 'Gera',
-      street: 'Test Street',
-      streetNumber: '55a',
-      postcode: '75683',
-    ),
-    const HomeEntity(
-      id: '2',
-      name: 'Elternhaus',
-      city: 'Pößneck',
-      street: 'Test Street',
-      streetNumber: '63a',
-      postcode: '07381',
-    ),
-    const HomeEntity(
-      id: '3',
-      name: 'Eigene Wohung',
-      city: 'Jena',
-      street: 'Coole Streeeeeeeeeeeeeeeeeeeeeeet',
-      streetNumber: '99',
-      postcode: '92379',
-    ),
-    const HomeEntity(
-      id: '4',
-      name: 'Anwesen in den Bergen',
-      city: 'Berchtesgaden',
-      street: 'An der Kuhglocke',
-      streetNumber: '13c',
-      postcode: '12345',
-    ),
-  ];
 
   @override
   Widget build(BuildContext context) {
@@ -71,75 +38,102 @@ class _ShowHomesPageState extends State<ShowHomesPage> {
             onResult: onResultRecieved,
             track: '07546 Gera',
           ),
-          const SizedBox(height: 20),
-          ..._getHomeWidgets(context),
+          const SizedBox(height: 10.0),
+          _buildHomeWidgets(context),
         ]),
       ),
     );
   }
 
-  List<Widget> _getHomeWidgets(BuildContext context) {
-    List<Widget> homeCardsWithSpaces = [];
-    for (final HomeEntity home in _homes) {
-      final Widget dismissibleCard = Dismissible(
-        key: Key(home.id), // Unique key for Dismissible
-        direction: DismissDirection.endToStart, // Swipe direction
-        onDismissed: (direction) {
-          // Callback when the item is dismissed
-          _deleteHome(home.id);
-        },
-        background: Container(
+  BlocBuilder<HomeBloc, HomeState> _buildHomeWidgets(BuildContext context) {
+    return BlocBuilder<HomeBloc, HomeState>(
+      buildWhen: (previous, current) =>
+          current is HomeEmpty ||
+          current is GetAllHomesFetching ||
+          current is GetAllHomesSuccess ||
+          current is GetAllHomesError,
+      builder: (context, state) {
+        if (state is GetAllHomesFetching) {
+          return const CircularProgressIndicator();
+        } else if (state is GetAllHomesSuccess) {
+          return Column(children: _buildHomesList(state.homes));
+        } else if (state is GetAllHomesError) {
+          return Text(state.message);
+        } else {
+          return const Text('No homes found. Create one!');
+        }
+      },
+    );
+  }
+
+  List<Widget> _buildHomesList(List<HomeEntity> homes) {
+    return homes.map(
+      (home) {
+        return Dismissible(
+          key: Key(home.id),
+          direction: DismissDirection.endToStart,
+          onDismissed: (direction) {
+            _sendDeleteHome(home);
+          },
+          background: Container(
             alignment: Alignment.centerRight,
             padding: const EdgeInsets.only(right: 20.0),
             decoration: BoxDecoration(
-                color: Colors.red, borderRadius: BorderRadius.circular(10)),
-            child: const Icon(Icons.delete, color: Colors.white)),
-        child: SizedBox(
-          width: MediaQuery.of(context).size.width * 0.90,
-          height: 75.0,
-          child: HomeButton(
-            homeName: home.name,
-            onPressed: () {
-              Navigator.of(context).pushNamed(
-                AppRouter.showWayToHome,
-                arguments: ShowWayToHomeArgs(home: home),
-              );
-            },
-            onTrailingPressed: () {
-              _navigateToCreateOrEditHomePage(context, home);
-            },
+              color: Colors.red,
+              borderRadius: BorderRadius.circular(10),
+            ),
+            child: const Icon(Icons.delete, color: Colors.white),
           ),
-        ),
-      );
-
-      homeCardsWithSpaces.add(dismissibleCard);
-      homeCardsWithSpaces.add(const SizedBox(height: 10.0));
-    }
-
-    return homeCardsWithSpaces;
+          child: SizedBox(
+            width: MediaQuery.of(context).size.width * 0.90,
+            height: 75.0,
+            child: HomeButton(
+              homeName: home.name,
+              onPressed: () {
+                _navigateToShowWayToHomePage(context, home);
+              },
+              onTrailingPressed: () {
+                _navigateToCreateOrEditHomePage(context, home);
+              },
+            ),
+          ),
+        );
+      },
+    ).toList();
   }
 
-  Future<void> _navigateToCreateOrEditHomePage(
+  void _navigateToCreateOrEditHomePage(
     BuildContext context,
     HomeEntity home,
   ) async {
-    final newHome = await Navigator.of(context).pushNamed(
+    Navigator.of(context).pushNamed(
       AppRouter.createOrEditHome,
       arguments: CreateOrEditHomeArgs(
         home: home,
         isNewHome: false,
       ),
     );
+  }
 
-    if (!context.mounted || newHome == null) {
-      return;
-    }
+  void _navigateToShowWayToHomePage(BuildContext context, HomeEntity home) {
+    Navigator.of(context).pushNamed(
+      AppRouter.showWayToHome,
+      arguments: ShowWayToHomeArgs(home: home),
+    );
+  }
 
-    final int indexOfOldHome = _homes.indexOf(home);
-    setState(() {
-      _homes.removeAt(indexOfOldHome);
-      _homes.insert(indexOfOldHome, newHome as HomeEntity);
-    });
+  void _sendDeleteHome(HomeEntity home) {
+    BlocProvider.of<HomeBloc>(context).add(
+      DeleteHomeEvent(id: home.id),
+    );
+
+    _sendGetAllHomes();
+  }
+
+  void _sendGetAllHomes() {
+    BlocProvider.of<HomeBloc>(context).add(
+      GetAllHomesEvent(),
+    );
   }
 }
 
