@@ -37,11 +37,7 @@ class _AppState extends State<App> {
         child: const Icon(Icons.add),
       ),
       body: const SafeArea(
-        child: Scrollbar(
-          child: SingleChildScrollView(
-            child: ShowHomesPage(),
-          ),
-        ),
+        child: ShowHomesPage(),
       ),
     );
   }

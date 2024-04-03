@@ -60,8 +60,10 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
   void _handleGetAllHomes(
     GetAllHomesEvent event,
     Emitter<HomeState> emit,
-  ) {
+  ) async {
     emit(GetAllHomesFetching());
+
+    await Future.delayed(const Duration(seconds: 2));
 
     emit(GetAllHomesSuccess(homes: currentHomes));
 

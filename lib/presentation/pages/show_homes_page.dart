@@ -25,22 +25,18 @@ class _ShowHomesPageState extends State<ShowHomesPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Center(
+    return RefreshIndicator(
+      onRefresh: () async {
+        _sendGetAllHomes();
+      },
       child: Padding(
         padding: const EdgeInsets.all(8.0),
-        child: Column(children: [
-          const CurrentLocationCard(
-            startStation: 'Gera DHGE',
-            distance: '',
-            departureArrival: 'Weg der Freundschaft 4',
-            leadingIcon: Icon(Icons.gps_fixed),
-            trailingIcon: Icon(Icons.edit),
-            onResult: onResultRecieved,
-            track: '07546 Gera',
+        child: Scrollbar(
+          child: SingleChildScrollView(
+            physics: const AlwaysScrollableScrollPhysics(),
+            child: Center(child: _buildHomeWidgets(context)),
           ),
-          const SizedBox(height: 10.0),
-          _buildHomeWidgets(context),
-        ]),
+        ),
       ),
     );
   }
@@ -69,34 +65,39 @@ class _ShowHomesPageState extends State<ShowHomesPage> {
   List<Widget> _buildHomesList(List<HomeEntity> homes) {
     return homes.map(
       (home) {
-        return Dismissible(
-          key: Key(home.id),
-          direction: DismissDirection.endToStart,
-          onDismissed: (direction) {
-            _sendDeleteHome(home);
-          },
-          background: Container(
-            alignment: Alignment.centerRight,
-            padding: const EdgeInsets.only(right: 20.0),
-            decoration: BoxDecoration(
-              color: Colors.red,
-              borderRadius: BorderRadius.circular(10),
-            ),
-            child: const Icon(Icons.delete, color: Colors.white),
-          ),
-          child: SizedBox(
-            width: MediaQuery.of(context).size.width * 0.90,
-            height: 75.0,
-            child: HomeButton(
-              homeName: home.name,
-              onPressed: () {
-                _navigateToShowWayToHomePage(context, home);
+        return Column(
+          children: [
+            Dismissible(
+              key: Key(home.id),
+              direction: DismissDirection.endToStart,
+              onDismissed: (direction) {
+                _sendDeleteHome(home);
               },
-              onTrailingPressed: () {
-                _navigateToCreateOrEditHomePage(context, home);
-              },
+              background: Container(
+                alignment: Alignment.centerRight,
+                padding: const EdgeInsets.only(right: 20.0),
+                decoration: BoxDecoration(
+                  color: Colors.red,
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                child: const Icon(Icons.delete, color: Colors.white),
+              ),
+              child: SizedBox(
+                width: MediaQuery.of(context).size.width * 0.90,
+                height: 75.0,
+                child: HomeButton(
+                  homeName: home.name,
+                  onPressed: () {
+                    _navigateToShowWayToHomePage(context, home);
+                  },
+                  onTrailingPressed: () {
+                    _navigateToCreateOrEditHomePage(context, home);
+                  },
+                ),
+              ),
             ),
-          ),
+            const SizedBox(height: 10.0),
+          ],
         );
       },
     ).toList();
