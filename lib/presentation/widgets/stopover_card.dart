@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:take_me_home/domain/entities/station_entity.dart';
 
 class StopoverCard extends StatefulWidget {
   final String startStation;
@@ -20,19 +19,17 @@ class StopoverCard extends StatefulWidget {
   }) : super(key: key);
 
   @override
-  _StopoverCardState createState() => _StopoverCardState();
+  State<StopoverCard> createState() => _StopoverCardState();
 }
 
 class _StopoverCardState extends State<StopoverCard> {
-  // Hier kannst du Zustandsvariablen definieren und verwalten.
-  late StationEntity Test;
   @override
   Widget build(BuildContext context) {
     return Card(
       child: ListTile(
         leading: widget.leadingIcon,
-        title: Text("${widget.startStation}  ${widget.distance}"),
-        subtitle: Text("${widget.departureArrival} \n${widget.track}"),
+        title: Text('${widget.startStation}  ${widget.distance}'),
+        subtitle: Text('${widget.departureArrival} \n${widget.track}'),
         trailing: widget.trailingIcon,
       ),
     );

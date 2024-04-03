@@ -2,8 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 class EditTimeToStart extends StatefulWidget {
+  const EditTimeToStart({super.key});
+
   @override
-  _EditTimeToStartState createState() => _EditTimeToStartState();
+  State<EditTimeToStart> createState() => _EditTimeToStartState();
 }
 
 class _EditTimeToStartState extends State<EditTimeToStart> {
@@ -22,19 +24,19 @@ class _EditTimeToStartState extends State<EditTimeToStart> {
               // Textfeld für Stunden
               TextField(
                 controller: hourController,
-                decoration: InputDecoration(labelText: 'Stunde'),
+                decoration: const InputDecoration(labelText: 'Stunde'),
                 keyboardType: TextInputType.number,
                 inputFormatters: [FilteringTextInputFormatter.digitsOnly],
               ),
               // Textfeld für Minuten
               TextField(
                 controller: minuteController,
-                decoration: InputDecoration(labelText: 'Minute'),
+                decoration: const InputDecoration(labelText: 'Minute'),
                 keyboardType: TextInputType.number,
                 inputFormatters: [FilteringTextInputFormatter.digitsOnly],
               ),
               ElevatedButton(
-                child: Icon(Icons.save),
+                child: const Icon(Icons.save),
                 onPressed: () {
                   // Erstellung eines TimeOfDay Objektes aus den Eingaben
                   final int hour = int.tryParse(hourController.text) ??

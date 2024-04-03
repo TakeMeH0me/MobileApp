@@ -23,24 +23,10 @@ class CurrentLocationCard extends StatefulWidget {
   }) : super(key: key);
 
   @override
-  _CurrentLocationCardState createState() => _CurrentLocationCardState();
+  State<CurrentLocationCard> createState() => _CurrentLocationCardState();
 }
 
 class _CurrentLocationCardState extends State<CurrentLocationCard> {
-  void _navigateAndDisplaySelection(BuildContext context) async {
-    // Navigator.push returns a Future that completes after calling Navigator.pop on the Selection Screen
-    final result = await Navigator.push(
-      context,
-      MaterialPageRoute(builder: (context) => EditTimeToStart()),
-    );
-
-    widget.onResult(result);
-
-    ScaffoldMessenger.of(context)
-      ..removeCurrentSnackBar()
-      ..showSnackBar(SnackBar(content: Text('$result')));
-  }
-
   @override
   Widget build(BuildContext context) {
     return Card(
@@ -49,8 +35,8 @@ class _CurrentLocationCardState extends State<CurrentLocationCard> {
         width: MediaQuery.of(context).size.width * 0.90,
         child: ListTile(
           leading: widget.leadingIcon,
-          title: Text("${widget.startStation}  ${widget.distance}"),
-          subtitle: Text("${widget.departureArrival} \n${widget.track}"),
+          title: Text('${widget.startStation}  ${widget.distance}'),
+          subtitle: Text('${widget.departureArrival} \n${widget.track}'),
           trailing: IconButton(
             onPressed: () {
               _navigateAndDisplaySelection(context);
@@ -60,5 +46,18 @@ class _CurrentLocationCardState extends State<CurrentLocationCard> {
         ),
       ),
     );
+  }
+
+  void _navigateAndDisplaySelection(BuildContext context) async {
+    final result = await Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => const EditTimeToStart()),
+    );
+
+    widget.onResult(result);
+
+    ScaffoldMessenger.of(context)
+      ..removeCurrentSnackBar()
+      ..showSnackBar(SnackBar(content: Text('$result')));
   }
 }
