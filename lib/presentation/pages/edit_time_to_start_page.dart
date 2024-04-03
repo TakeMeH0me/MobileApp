@@ -33,7 +33,7 @@ class _EditTimeToStartState extends State<EditTimeToStart> {
                 keyboardType: TextInputType.number,
                 inputFormatters: [FilteringTextInputFormatter.digitsOnly],
               ),
-              OutlinedButton(
+              ElevatedButton(
                 child: Icon(Icons.save),
                 onPressed: () {
                   // Erstellung eines TimeOfDay Objektes aus den Eingaben

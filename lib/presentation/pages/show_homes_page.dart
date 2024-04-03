@@ -1,5 +1,8 @@
+import 'dart:ffi';
+
 import 'package:flutter/material.dart';
 import 'package:take_me_home/domain/entities/home_entity.dart';
+import 'package:take_me_home/presentation/pages/settings_page.dart';
 import 'package:take_me_home/presentation/router/args/create_or_edit_home_args.dart';
 import 'package:take_me_home/presentation/router/app_router.dart';
 import 'package:take_me_home/presentation/router/args/show_way_to_home_args.dart';
@@ -71,6 +74,9 @@ class _ShowHomesPageState extends State<ShowHomesPage> {
             onResult: onResultRecieved,
             track: '07546 Gera',
           ),
+          SizedBox(
+            height: 20,
+          ),
           ..._getHomeWidgets(context),
         ]),
       ),
@@ -94,7 +100,7 @@ class _ShowHomesPageState extends State<ShowHomesPage> {
                 color: Colors.red, borderRadius: BorderRadius.circular(10)),
             child: const Icon(Icons.delete, color: Colors.white)),
         child: SizedBox(
-          width: MediaQuery.of(context).size.width * 0.75,
+          width: MediaQuery.of(context).size.width * 0.90,
           height: 75.0,
           child: HomeButton(
             homeName: home.name,

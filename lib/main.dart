@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:take_me_home/injection_container.dart' as injection_container;
 import 'package:take_me_home/presentation/bloc/station/station_bloc.dart';
 import 'package:take_me_home/presentation/router/app_router.dart';
+import 'package:take_me_home/presentation/theme/color_themes.dart';
 
 void main() async {
   await injection_container.init();
@@ -35,6 +36,8 @@ class MainApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       initialRoute: AppRouter.root,
       onGenerateRoute: (settings) => appRouter.onGenerateRoute(settings),
+      darkTheme: ThemeData(colorScheme: darkColorScheme),
+      theme: ThemeData(colorScheme: lightColorScheme),
     );
   }
 }

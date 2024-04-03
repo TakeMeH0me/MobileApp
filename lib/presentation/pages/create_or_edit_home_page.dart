@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:take_me_home/domain/entities/home_entity.dart';
+import 'package:take_me_home/presentation/theme/color_themes.dart';
 
 /// A home can be created ([isEditing] = false) or edited ([isEditing] = true) with this page.
 ///
@@ -77,39 +78,56 @@ class _CreateOrEditHomePageState extends State<CreateOrEditHomePage> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       const SizedBox(height: 10.0),
-                      TextField(
-                        controller: _homeNameController,
-                        decoration: const InputDecoration(
-                          labelText: 'Home Name',
+                      Card(
+                        color: lightColorScheme.surface,
+                        child: ListTile(
+                          title: TextField(
+                            controller: _homeNameController,
+                            decoration: const InputDecoration(
+                              labelText: 'Home Name',
+                            ),
+                          ),
                         ),
                       ),
                       const SizedBox(height: 10.0),
-                      TextField(
-                        controller: _streetController,
-                        decoration: const InputDecoration(
-                          labelText: 'Street',
-                        ),
-                      ),
+                      Card(
+                          color: lightColorScheme.surface,
+                          child: ListTile(
+                            title: TextField(
+                              controller: _streetController,
+                              decoration: const InputDecoration(
+                                labelText: 'Street',
+                              ),
+                            ),
+                          )),
                       const SizedBox(height: 10.0),
-                      TextField(
-                        controller: _streetNumberController,
-                        decoration: const InputDecoration(
-                          labelText: 'Street Number',
-                        ),
-                        maxLength: 4,
-                      ),
+                      Card(
+                          color: lightColorScheme.surface,
+                          child: ListTile(
+                            title: TextField(
+                              controller: _streetNumberController,
+                              decoration: const InputDecoration(
+                                labelText: 'Street Number',
+                              ),
+                              maxLength: 4,
+                            ),
+                          )),
                       const SizedBox(height: 10.0),
-                      TextField(
-                        controller: _postcodeController,
-                        decoration: const InputDecoration(
-                          labelText: 'Postcode',
-                        ),
-                        inputFormatters: [
-                          FilteringTextInputFormatter.digitsOnly
-                        ],
-                        maxLength: 5,
-                        keyboardType: TextInputType.number,
-                      ),
+                      Card(
+                          color: lightColorScheme.surface,
+                          child: ListTile(
+                            title: TextField(
+                              controller: _postcodeController,
+                              decoration: const InputDecoration(
+                                labelText: 'Postcode',
+                              ),
+                              inputFormatters: [
+                                FilteringTextInputFormatter.digitsOnly
+                              ],
+                              maxLength: 5,
+                              keyboardType: TextInputType.number,
+                            ),
+                          )),
                       const SizedBox(height: 10.0),
                     ],
                   ),

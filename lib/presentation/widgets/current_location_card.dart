@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:take_me_home/presentation/pages/edit_time_to_start_page.dart';
+import 'package:take_me_home/presentation/theme/color_themes.dart';
 
 class CurrentLocationCard extends StatefulWidget {
   final String startStation;
@@ -43,15 +44,19 @@ class _CurrentLocationCardState extends State<CurrentLocationCard> {
   @override
   Widget build(BuildContext context) {
     return Card(
-      child: ListTile(
-        leading: widget.leadingIcon,
-        title: Text("${widget.startStation}  ${widget.distance}"),
-        subtitle: Text("${widget.departureArrival} \n${widget.track}"),
-        trailing: IconButton(
-          onPressed: () {
-            _navigateAndDisplaySelection(context);
-          },
-          icon: widget.trailingIcon,
+      color: lightColorScheme.secondary,
+      child: SizedBox(
+        width: MediaQuery.of(context).size.width * 0.90,
+        child: ListTile(
+          leading: widget.leadingIcon,
+          title: Text("${widget.startStation}  ${widget.distance}"),
+          subtitle: Text("${widget.departureArrival} \n${widget.track}"),
+          trailing: IconButton(
+            onPressed: () {
+              _navigateAndDisplaySelection(context);
+            },
+            icon: widget.trailingIcon,
+          ),
         ),
       ),
     );
