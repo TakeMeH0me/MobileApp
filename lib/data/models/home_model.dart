@@ -1,3 +1,4 @@
+import 'package:take_me_home/data/models/station_model.dart';
 import 'package:take_me_home/domain/entities/home_entity.dart';
 
 class HomeModel extends HomeEntity {
@@ -8,6 +9,7 @@ class HomeModel extends HomeEntity {
     required super.street,
     required super.streetNumber,
     required super.postcode,
+    required super.mainStation,
   });
 
   factory HomeModel.fromJson(Map<String, dynamic> json) {
@@ -20,6 +22,7 @@ class HomeModel extends HomeEntity {
       street: jsonBody['street'] as String,
       streetNumber: jsonBody['streetNumber'] as String,
       postcode: jsonBody['postcode'] as String,
+      mainStation: StationModel.fromJson(jsonBody['mainStation']).toEntity(),
     );
   }
 
@@ -32,6 +35,7 @@ class HomeModel extends HomeEntity {
         'street': street,
         'streetNumber': streetNumber,
         'postcode': postcode,
+        'mainStation': StationModel.fromEntity(mainStation).toJson(),
       },
     };
   }
@@ -44,6 +48,7 @@ class HomeModel extends HomeEntity {
       street: entity.street,
       streetNumber: entity.streetNumber,
       postcode: entity.postcode,
+      mainStation: entity.mainStation,
     );
   }
 
@@ -55,6 +60,7 @@ class HomeModel extends HomeEntity {
       street: street,
       streetNumber: streetNumber,
       postcode: postcode,
+      mainStation: mainStation,
     );
   }
 }

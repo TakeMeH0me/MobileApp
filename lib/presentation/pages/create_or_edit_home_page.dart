@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:take_me_home/domain/entities/home_entity.dart';
+import 'package:take_me_home/domain/entities/station_entity.dart';
 import 'package:take_me_home/presentation/bloc/home/home_bloc.dart';
 import 'package:take_me_home/presentation/theme/color_themes.dart';
 
@@ -42,6 +43,21 @@ class _CreateOrEditHomePageState extends State<CreateOrEditHomePage> {
     text: widget.home.city,
   );
 
+  final List<StationEntity> _stations = [
+    const StationEntity(
+      id: '8012657',
+      name: 'Pößneck ob Bf',
+    ),
+    const StationEntity(
+      id: '8011957',
+      name: 'Jena West',
+    ),
+    const StationEntity(
+      id: '8010101',
+      name: 'Erfurt Hbf',
+    ),
+  ];
+
   @override
   void initState() {
     super.initState();
@@ -51,94 +67,121 @@ class _CreateOrEditHomePageState extends State<CreateOrEditHomePage> {
     _streetNumberController.addListener(_onNumberChanged);
     _postcodeController.addListener(_onPostcodeChanged);
     _cityController.addListener(_onCityChanged);
+
+    if (currentHome.mainStation == const StationEntity.empty()) {
+      currentHome = currentHome.copyWith(mainStation: _stations.first);
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: SafeArea(
-        child: Column(
-          children: [
-            const Text('Create Or Edit Home Page'),
-            Scrollbar(
-              child: SingleChildScrollView(
-                child: Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      const SizedBox(height: 10.0),
-                      Card(
-                        color: lightColorTheme.colorScheme.surface,
-                        child: ListTile(
-                          title: TextField(
-                            controller: _homeNameController,
-                            decoration: const InputDecoration(
-                              labelText: 'Home Name',
-                            ),
-                          ),
+        child: Scrollbar(
+          child: SingleChildScrollView(
+            physics: const AlwaysScrollableScrollPhysics(),
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Card(
+                    color: lightColorTheme.colorScheme.surface,
+                    child: ListTile(
+                      leading: const Icon(Icons.train),
+                      title: _buildStationSelection(),
+                    ),
+                  ),
+                  const SizedBox(height: 10.0),
+                  Card(
+                    color: lightColorTheme.colorScheme.surface,
+                    child: ListTile(
+                      title: TextField(
+                        controller: _homeNameController,
+                        decoration: const InputDecoration(
+                          labelText: 'Home Name',
                         ),
                       ),
-                      const SizedBox(height: 10.0),
-                      Card(
-                          color: lightColorTheme.colorScheme.surface,
-                          child: ListTile(
-                            title: TextField(
-                              controller: _cityController,
-                              decoration: const InputDecoration(
-                                labelText: 'City',
-                              ),
-                            ),
-                          )),
-                      const SizedBox(height: 10.0),
-                      Card(
-                          color: lightColorTheme.colorScheme.surface,
-                          child: ListTile(
-                            title: TextField(
-                              controller: _streetController,
-                              decoration: const InputDecoration(
-                                labelText: 'Street',
-                              ),
-                            ),
-                          )),
-                      const SizedBox(height: 10.0),
-                      Card(
-                          color: lightColorTheme.colorScheme.surface,
-                          child: ListTile(
-                            title: TextField(
-                              controller: _streetNumberController,
-                              decoration: const InputDecoration(
-                                labelText: 'Street Number',
-                              ),
-                              maxLength: 4,
-                            ),
-                          )),
-                      const SizedBox(height: 10.0),
-                      Card(
-                          color: lightColorTheme.colorScheme.surface,
-                          child: ListTile(
-                            title: TextField(
-                              controller: _postcodeController,
-                              decoration: const InputDecoration(
-                                labelText: 'Postcode',
-                              ),
-                              inputFormatters: [
-                                FilteringTextInputFormatter.digitsOnly
-                              ],
-                              maxLength: 5,
-                              keyboardType: TextInputType.number,
-                            ),
-                          )),
-                      const SizedBox(height: 10.0),
-                    ],
+                    ),
                   ),
-                ),
+                  const SizedBox(height: 10.0),
+                  Card(
+                    color: lightColorTheme.colorScheme.surface,
+                    child: ListTile(
+                      title: TextField(
+                        controller: _cityController,
+                        decoration: const InputDecoration(
+                          labelText: 'City',
+                        ),
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 10.0),
+                  Card(
+                      color: lightColorTheme.colorScheme.surface,
+                      child: ListTile(
+                        title: TextField(
+                          controller: _streetController,
+                          decoration: const InputDecoration(
+                            labelText: 'Street',
+                          ),
+                        ),
+                      )),
+                  const SizedBox(height: 10.0),
+                  Card(
+                      color: lightColorTheme.colorScheme.surface,
+                      child: ListTile(
+                        title: TextField(
+                          controller: _streetNumberController,
+                          decoration: const InputDecoration(
+                            labelText: 'Street Number',
+                          ),
+                          maxLength: 4,
+                        ),
+                      )),
+                  const SizedBox(height: 10.0),
+                  Card(
+                      color: lightColorTheme.colorScheme.surface,
+                      child: ListTile(
+                        title: TextField(
+                          controller: _postcodeController,
+                          decoration: const InputDecoration(
+                            labelText: 'Postcode',
+                          ),
+                          inputFormatters: [
+                            FilteringTextInputFormatter.digitsOnly
+                          ],
+                          maxLength: 5,
+                          keyboardType: TextInputType.number,
+                        ),
+                      )),
+                  const SizedBox(height: 10.0),
+                ],
               ),
             ),
-          ],
+          ),
         ),
       ),
       bottomNavigationBar: _buildBottomNavigationBar(context),
+    );
+  }
+
+  DropdownButton<StationEntity> _buildStationSelection() {
+    return DropdownButton(
+      items: _stations
+          .map(
+            (station) => DropdownMenuItem(
+              value: station,
+              child: Text(station.name),
+            ),
+          )
+          .toList(),
+      value: currentHome.mainStation,
+      onChanged: (value) {
+        setState(() {
+          currentHome = currentHome.copyWith(mainStation: value);
+        });
+      },
     );
   }
 

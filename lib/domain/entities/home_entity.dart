@@ -1,4 +1,5 @@
 import 'package:equatable/equatable.dart';
+import 'package:take_me_home/domain/entities/station_entity.dart';
 import 'package:uuid/uuid.dart';
 
 /// An instance of a home you wanna go to.
@@ -9,6 +10,7 @@ class HomeEntity extends Equatable {
   final String street;
   final String streetNumber;
   final String postcode;
+  final StationEntity mainStation;
 
   const HomeEntity({
     required this.id,
@@ -17,6 +19,7 @@ class HomeEntity extends Equatable {
     required this.street,
     required this.streetNumber,
     required this.postcode,
+    required this.mainStation,
   });
 
   HomeEntity copyWith({
@@ -26,6 +29,7 @@ class HomeEntity extends Equatable {
     String? street,
     String? streetNumber,
     String? postcode,
+    StationEntity? mainStation,
   }) {
     return HomeEntity(
       id: id ?? this.id,
@@ -34,6 +38,7 @@ class HomeEntity extends Equatable {
       street: street ?? this.street,
       streetNumber: streetNumber ?? this.streetNumber,
       postcode: postcode ?? this.postcode,
+      mainStation: mainStation ?? this.mainStation,
     );
   }
 
@@ -45,11 +50,12 @@ class HomeEntity extends Equatable {
       street: '',
       streetNumber: '',
       postcode: '',
+      mainStation: const StationEntity.empty(),
     );
   }
 
   @override
   List<Object> get props {
-    return [id, name, city, street, streetNumber, postcode];
+    return [id, name, city, street, streetNumber, postcode, mainStation];
   }
 }

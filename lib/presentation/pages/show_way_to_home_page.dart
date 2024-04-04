@@ -25,11 +25,6 @@ class _ShowWayToHomePageState extends State<ShowWayToHomePage> {
     id: '8010125',
     name: 'Gera Hbf',
   );
-  // TODO: später sollte dann die Station im Home mit drinnen sein (also als mainStation oder so)
-  late final StationEntity _endStation = const StationEntity(
-    id: '8012657',
-    name: 'Pößneck ob Bf',
-  );
 
   @override
   void initState() {
@@ -46,7 +41,7 @@ class _ShowWayToHomePageState extends State<ShowWayToHomePage> {
     );
     BlocProvider.of<StationBloc>(context).add(
       GetMeansOfTransportByTime(
-        _endStation,
+        widget.home.mainStation,
         const TimeOfDay(hour: 14, minute: 40),
       ),
     );
@@ -66,9 +61,9 @@ class _ShowWayToHomePageState extends State<ShowWayToHomePage> {
                   widget.home.name,
                   style: const TextStyle(fontSize: 30),
                 ),
-                const SizedBox(height: 10),
+                const SizedBox(height: 10.0),
                 _buildTimeIndicator(),
-                const SizedBox(height: 10),
+                const SizedBox(height: 10.0),
                 _buildRouteList(),
               ],
             ),
@@ -89,7 +84,7 @@ class _ShowWayToHomePageState extends State<ShowWayToHomePage> {
           final TimeOfDay time =
               state.meansOfTransportEntities[0].departureTime;
           return Text(
-            'Du musst in loslaufen ${time.hour - TimeOfDay.now().hour}h und ${time.minute - TimeOfDay.now().minute}min .${time.toString()}',
+            'Du musst in  ${time.hour - TimeOfDay.now().hour}h und ${time.minute - TimeOfDay.now().minute}min .${time.toString()} loslaufen!',
             style: const TextStyle(fontSize: 16),
           );
         } else {

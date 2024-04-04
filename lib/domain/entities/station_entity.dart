@@ -22,6 +22,10 @@ class StationEntity extends Equatable {
     );
   }
 
+  const StationEntity.empty()
+      : id = '',
+        name = '';
+
   @override
   List<Object?> get props => [id, name];
 }
