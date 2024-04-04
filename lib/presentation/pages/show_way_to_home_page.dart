@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:take_me_home/domain/entities/home_entity.dart';
+import 'package:take_me_home/domain/entities/means_of_transport_entity.dart';
 import 'package:take_me_home/domain/entities/station_entity.dart';
 import 'package:take_me_home/presentation/bloc/station/station_bloc.dart';
+import 'package:take_me_home/presentation/widgets/stopover_card.dart';
 
 /// Show one trip to the selected home with single stations,
 /// time between the stations and information to each single station.
@@ -21,11 +23,6 @@ class ShowWayToHomePage extends StatefulWidget {
 }
 
 class _ShowWayToHomePageState extends State<ShowWayToHomePage> {
-  late final StationEntity _startStation = const StationEntity(
-    id: '8010125',
-    name: 'Gera Hbf',
-  );
-
   @override
   void initState() {
     super.initState();
@@ -35,14 +32,13 @@ class _ShowWayToHomePageState extends State<ShowWayToHomePage> {
   void _initDefaultMeansOfTransport() {
     BlocProvider.of<StationBloc>(context).add(
       GetMeansOfTransportByTime(
-        _startStation,
-        const TimeOfDay(hour: 13, minute: 40),
-      ),
-    );
-    BlocProvider.of<StationBloc>(context).add(
-      GetMeansOfTransportByTime(
-        widget.home.mainStation,
-        const TimeOfDay(hour: 14, minute: 40),
+        startStation: const StationEntity(
+          id: '8010125',
+          name: 'Gera Hbf',
+        ),
+        endStation: widget.home.mainStation,
+        startTime: const TimeOfDay(hour: 17, minute: 40),
+        endTime: const TimeOfDay(hour: 18, minute: 40),
       ),
     );
   }
@@ -96,34 +92,38 @@ class _ShowWayToHomePageState extends State<ShowWayToHomePage> {
 
   BlocBuilder<StationBloc, StationState> _buildRouteList() {
     return BlocBuilder<StationBloc, StationState>(
+      buildWhen: (previous, current) =>
+          current is StationInitial ||
+          current is StationsUpdated ||
+          current is StationError,
       builder: (context, state) {
         if (state is StationLoading) {
           return const Center(child: CircularProgressIndicator());
         } else if (state is StationError) {
           return Text(state.message);
         } else if (state is StationsUpdated) {
-          return Column(
-            children: state.meansOfTransportEntities
-                .map(
-                  (meansOfTransportEntity) => Column(
-                    children: [
-                      Text(
-                        meansOfTransportEntity.name,
-                        style: const TextStyle(fontSize: 20),
-                      ),
-                      Text(
-                        '${meansOfTransportEntity.departureTime.hour}:${meansOfTransportEntity.departureTime.minute}',
-                        style: const TextStyle(fontSize: 16),
-                      ),
-                      Text(
-                        meansOfTransportEntity.delayInMinutes.toString(),
-                        style: const TextStyle(fontSize: 16),
-                      ),
-                      const SizedBox(height: 10),
-                    ],
-                  ),
-                )
-                .toList(),
+          final List<StationEntity> stations = state.stations;
+          final List<MeansOfTransportEntity> meansOfTransportEntities =
+              state.meansOfTransportEntities;
+
+          if (stations.isEmpty || meansOfTransportEntities.isEmpty) {
+            return const SizedBox.shrink();
+          }
+
+          if (stations.length != meansOfTransportEntities.length) {
+            return const Text('Error while loading stations: Length mismatch.');
+          }
+
+          return ListView.builder(
+            shrinkWrap: true,
+            physics: const NeverScrollableScrollPhysics(),
+            itemCount: stations.length,
+            itemBuilder: (context, index) {
+              return StopoverCard(
+                station: stations[index],
+                meansOfTransport: meansOfTransportEntities[index],
+              );
+            },
           );
         } else {
           return const SizedBox.shrink();

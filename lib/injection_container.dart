@@ -9,6 +9,7 @@ import 'package:take_me_home/data/repository/station_repository_impl.dart';
 import 'package:take_me_home/data/repository/supabase_home_repository_impl.dart';
 import 'package:take_me_home/domain/repository/home_repository.dart';
 import 'package:take_me_home/domain/repository/station_repository.dart';
+import 'package:take_me_home/domain/usecase/station/station_route_usecase.dart';
 import 'package:take_me_home/presentation/bloc/home/home_bloc.dart';
 import 'package:take_me_home/presentation/bloc/station/station_bloc.dart';
 
@@ -18,10 +19,14 @@ final sl = GetIt.instance;
 
 Future<void> init() async {
   sl.registerLazySingleton<StationBloc>(() => StationBloc(
-        stationRepository: sl(),
+        getStationRouteUseCase: sl(),
       ));
   sl.registerLazySingleton<HomeBloc>(() => HomeBloc(
         homeRepository: sl(),
+      ));
+
+  sl.registerLazySingleton(() => GetStationRouteUseCase(
+        stationRepository: sl(),
       ));
 
   sl.registerLazySingleton<StationRepository>(() => StationRepositoryImpl(

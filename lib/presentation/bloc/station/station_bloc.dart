@@ -3,70 +3,48 @@ import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:take_me_home/domain/entities/means_of_transport_entity.dart';
 import 'package:take_me_home/domain/entities/station_entity.dart';
-import 'package:take_me_home/domain/repository/station_repository.dart';
+import 'package:take_me_home/domain/usecase/station/station_route_usecase.dart';
 
 part 'station_event.dart';
 part 'station_state.dart';
 
 class StationBloc extends Bloc<StationEvent, StationState> {
-  final StationRepository stationRepository;
-  final List<MeansOfTransportEntity> currentMeansOfTransport = [];
+  final GetStationRouteUseCase getStationRouteUseCase;
 
-  final String trainId = 'RE 80851';
-
-  StationBloc({required this.stationRepository}) : super(StationInitial()) {
-    on<GetMeansOfTransportByTime>(handleGetMeansOfTransportByTime);
+  StationBloc({required this.getStationRouteUseCase})
+      : super(StationInitial()) {
+    on<GetMeansOfTransportByTime>(_onGetMeansOfTransportByTime);
   }
 
-  void handleGetMeansOfTransportByTime(
+  void _onGetMeansOfTransportByTime(
     GetMeansOfTransportByTime event,
     Emitter<StationState> emit,
   ) async {
     emit(StationLoading());
 
-    final result = await stationRepository.getMeansOfTransportByTime(
-      event.station,
-      event.time,
+    final result = await getStationRouteUseCase.execute(
+      event.startStation,
+      event.endStation,
+      event.startTime,
+      event.endTime,
     );
 
     result.fold(
       (failure) => emit(
         const StationError('Error while loading means of transport.'),
       ),
-      (meansOfTransportEntities) {
-        final MeansOfTransportEntity? nextMeansOfTransport =
-            _getCorrectMeansOfTransport(meansOfTransportEntities);
-
-        if (nextMeansOfTransport == null) {
+      (wasWorking) {
+        if (!wasWorking) {
+          emit(const StationError('It was not working.'));
           return;
         }
 
-        currentMeansOfTransport.add(nextMeansOfTransport);
-        currentMeansOfTransport.sort((a, b) {
-          final aTime = a.departureTime;
-          final bTime = b.departureTime;
-
-          if (aTime.hour == bTime.hour) {
-            return aTime.minute.compareTo(bTime.minute);
-          }
-
-          return aTime.hour.compareTo(bTime.hour);
-        });
-
-        emit(StationsUpdated(currentMeansOfTransport));
+        emit(StationsUpdated(
+          stations: getStationRouteUseCase.currentStations,
+          meansOfTransportEntities:
+              getStationRouteUseCase.currentMeansOfTransport,
+        ));
       },
     );
-  }
-
-  MeansOfTransportEntity? _getCorrectMeansOfTransport(
-    List<MeansOfTransportEntity> meansOfTransportEntities,
-  ) {
-    for (final meansOfTransportEntity in meansOfTransportEntities) {
-      if (meansOfTransportEntity.name == trainId) {
-        return meansOfTransportEntity;
-      }
-    }
-
-    return null;
   }
 }

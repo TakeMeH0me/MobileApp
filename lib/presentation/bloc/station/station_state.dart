@@ -12,9 +12,13 @@ final class StationInitial extends StationState {}
 final class StationLoading extends StationState {}
 
 final class StationsUpdated extends StationState {
+  final List<StationEntity> stations;
   final List<MeansOfTransportEntity> meansOfTransportEntities;
 
-  const StationsUpdated(this.meansOfTransportEntities);
+  const StationsUpdated({
+    required this.stations,
+    required this.meansOfTransportEntities,
+  });
 
   @override
   List<Object> get props => [meansOfTransportEntities];

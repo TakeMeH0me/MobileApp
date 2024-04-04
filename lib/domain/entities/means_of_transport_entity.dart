@@ -7,14 +7,31 @@ class MeansOfTransportEntity extends Equatable {
   final TimeOfDay departureTime;
   final bool isCancelled;
   final int delayInMinutes;
+  final MeansOfTransportType type;
 
   const MeansOfTransportEntity({
     required this.name,
     required this.departureTime,
     required this.isCancelled,
     required this.delayInMinutes,
+    required this.type,
   });
 
+  bool get isDelayed => delayInMinutes > 0;
+
   @override
-  List<Object?> get props => [name, departureTime, isCancelled, delayInMinutes];
+  List<Object?> get props => [
+        name,
+        departureTime,
+        isCancelled,
+        delayInMinutes,
+        type,
+      ];
+}
+
+enum MeansOfTransportType {
+  train,
+  bus,
+  tram,
+  unknown,
 }

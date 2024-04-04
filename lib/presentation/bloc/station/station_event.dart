@@ -8,14 +8,18 @@ sealed class StationEvent extends Equatable {
 }
 
 final class GetMeansOfTransportByTime extends StationEvent {
-  final StationEntity station;
-  final TimeOfDay time;
+  final StationEntity startStation;
+  final StationEntity endStation;
+  final TimeOfDay startTime;
+  final TimeOfDay endTime;
 
-  const GetMeansOfTransportByTime(
-    this.station,
-    this.time,
-  );
+  const GetMeansOfTransportByTime({
+    required this.startStation,
+    required this.endStation,
+    required this.startTime,
+    required this.endTime,
+  });
 
   @override
-  List<Object> get props => [station, time];
+  List<Object> get props => [startStation, endStation, startTime, endTime];
 }
