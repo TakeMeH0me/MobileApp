@@ -1,17 +1,18 @@
 import 'package:flutter/material.dart';
+import 'package:take_me_home/domain/entities/home_entity.dart';
 
 /// Button for interacting with a home. E. g. edit it's properties
 /// or show all stopvers.
 class HomeButton extends StatefulWidget {
   final Function() onPressed;
   final Function() onTrailingPressed;
-  final String homeName;
+  final HomeEntity home;
 
   const HomeButton({
     super.key,
     required this.onPressed,
     required this.onTrailingPressed,
-    required this.homeName,
+    required this.home,
   });
 
   @override
@@ -37,7 +38,8 @@ class _HomeButtonState extends State<HomeButton> {
           onPressed: () => {widget.onTrailingPressed()},
         ),
         contentPadding: const EdgeInsets.all(0.0),
-        title: Text(widget.homeName),
+        title: Text(widget.home.name),
+        subtitle: Text(widget.home.city),
       ),
     );
   }

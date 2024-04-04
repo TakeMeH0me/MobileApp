@@ -9,7 +9,6 @@ class EditTimeToStart extends StatefulWidget {
 }
 
 class _EditTimeToStartState extends State<EditTimeToStart> {
-  // Zwei Controller für Stunden und Minuten
   TextEditingController hourController = TextEditingController();
   TextEditingController minuteController = TextEditingController();
 
@@ -21,36 +20,9 @@ class _EditTimeToStartState extends State<EditTimeToStart> {
           padding: const EdgeInsets.all(10),
           child: Column(
             children: <Widget>[
-              // Textfeld für Stunden
-              TextField(
-                controller: hourController,
-                decoration: const InputDecoration(labelText: 'Stunde'),
-                keyboardType: TextInputType.number,
-                inputFormatters: [FilteringTextInputFormatter.digitsOnly],
-              ),
-              // Textfeld für Minuten
-              TextField(
-                controller: minuteController,
-                decoration: const InputDecoration(labelText: 'Minute'),
-                keyboardType: TextInputType.number,
-                inputFormatters: [FilteringTextInputFormatter.digitsOnly],
-              ),
-              ElevatedButton(
-                child: const Icon(Icons.save),
-                onPressed: () {
-                  // Erstellung eines TimeOfDay Objektes aus den Eingaben
-                  final int hour = int.tryParse(hourController.text) ??
-                      0; // Standardwert 0, wenn Konvertierung fehlschlägt
-                  final int minute = int.tryParse(minuteController.text) ??
-                      0; // Standardwert 0, wenn Konvertierung fehlschlägt
-
-                  TimeOfDay selectedTime =
-                      TimeOfDay(hour: hour, minute: minute);
-
-                  // Verwendung von Navigator.pop, um die ausgewählte Zeit zurück zur vorherigen Seite zu senden
-                  Navigator.pop(context, selectedTime);
-                },
-              )
+              _buildHourTextField(),
+              _buildMinuteTextField(),
+              _buildSaveButton(context)
             ],
           ),
         ),
@@ -60,9 +32,41 @@ class _EditTimeToStartState extends State<EditTimeToStart> {
 
   @override
   void dispose() {
-    // Controller entsorgen, wenn das Widget entfernt wird
     hourController.dispose();
     minuteController.dispose();
+
     super.dispose();
+  }
+
+  TextField _buildHourTextField() {
+    return TextField(
+      controller: hourController,
+      decoration: const InputDecoration(labelText: 'Stunde'),
+      keyboardType: TextInputType.number,
+      inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+    );
+  }
+
+  TextField _buildMinuteTextField() {
+    return TextField(
+      controller: minuteController,
+      decoration: const InputDecoration(labelText: 'Minute'),
+      keyboardType: TextInputType.number,
+      inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+    );
+  }
+
+  ElevatedButton _buildSaveButton(BuildContext context) {
+    return ElevatedButton(
+      child: const Icon(Icons.save),
+      onPressed: () {
+        final int hour = int.tryParse(hourController.text) ?? 0;
+        final int minute = int.tryParse(minuteController.text) ?? 0;
+
+        TimeOfDay selectedTime = TimeOfDay(hour: hour, minute: minute);
+
+        Navigator.pop(context, selectedTime);
+      },
+    );
   }
 }

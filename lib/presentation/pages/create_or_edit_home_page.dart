@@ -54,17 +54,6 @@ class _CreateOrEditHomePageState extends State<CreateOrEditHomePage> {
   }
 
   @override
-  void dispose() {
-    _homeNameController.dispose();
-    _streetController.dispose();
-    _streetNumberController.dispose();
-    _postcodeController.dispose();
-    _cityController.dispose();
-
-    super.dispose();
-  }
-
-  @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: SafeArea(
@@ -90,6 +79,17 @@ class _CreateOrEditHomePageState extends State<CreateOrEditHomePage> {
                           ),
                         ),
                       ),
+                      const SizedBox(height: 10.0),
+                      Card(
+                          color: lightColorTheme.colorScheme.surface,
+                          child: ListTile(
+                            title: TextField(
+                              controller: _cityController,
+                              decoration: const InputDecoration(
+                                labelText: 'City',
+                              ),
+                            ),
+                          )),
                       const SizedBox(height: 10.0),
                       Card(
                           color: lightColorTheme.colorScheme.surface,
@@ -140,6 +140,17 @@ class _CreateOrEditHomePageState extends State<CreateOrEditHomePage> {
       ),
       bottomNavigationBar: _buildBottomNavigationBar(context),
     );
+  }
+
+  @override
+  void dispose() {
+    _homeNameController.dispose();
+    _streetController.dispose();
+    _streetNumberController.dispose();
+    _postcodeController.dispose();
+    _cityController.dispose();
+
+    super.dispose();
   }
 
   Widget _buildBottomNavigationBar(BuildContext context) {

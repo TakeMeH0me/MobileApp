@@ -36,6 +36,10 @@ class _ShowHomesPageState extends State<ShowHomesPage> {
       stream: BlocProvider.of<HomeBloc>(context).homeListStream,
       builder: (context, snapshot) {
         if (snapshot.hasData) {
+          if (snapshot.data!.isEmpty) {
+            return const Text('No homes created yet. Create one!');
+          }
+
           return Column(
             children: _buildHomesList(snapshot.data!),
           );
@@ -72,7 +76,7 @@ class _ShowHomesPageState extends State<ShowHomesPage> {
                 width: MediaQuery.of(context).size.width * 0.90,
                 height: 75.0,
                 child: HomeButton(
-                  homeName: home.name,
+                  home: home,
                   onPressed: () {
                     _navigateToShowWayToHomePage(context, home);
                   },
