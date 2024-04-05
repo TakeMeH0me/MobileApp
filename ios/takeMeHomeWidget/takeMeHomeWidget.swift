@@ -17,12 +17,40 @@ struct Provider: TimelineProvider
 
     func getSnapshot(in context: Context, completion: @escaping (RouteInformation) -> ())
     {
-        let entry = RouteInformation(date: Date(), route: [])
+        let entry: RouteInformation
+        
+        if context.isPreview
+        {
+            entry = placeholder(in: context)
+        }
+        else
+        {
+            let userDefaults = UserDefaults(suiteName: "group.takemehome")
+            
+            let routeinformationJsonString = userDefaults?.string(forKey: "routeinformation_json")
+            
+            if (routeinformationJsonString != nil)
+            {
+                entry = RouteInformation.fromJson(jsonString: routeinformationJsonString!) ?? RouteInformation(date: Date(), route: [])
+            }
+            else
+            {
+                entry = RouteInformation(date: Date(), route: [])
+            }
+        }
+        
         completion(entry)
     }
     
     func getTimeline(in context: Context, completion: @escaping (Timeline<Entry>) -> ())
     {
+        getSnapshot(in: context)
+        { (entry) in
+            let timeline = Timeline(entries: [entry], policy: .atEnd)
+            completion(timeline)
+        }
+        
+        /*
         var entries: [RouteInformation] = []
 
         // Generate a timeline consisting of five entries an hour apart, starting from the current date.
@@ -74,24 +102,25 @@ struct Provider: TimelineProvider
 
         let timeline = Timeline(entries: entries, policy: .atEnd)
         completion(timeline)
+        */
     }
 }
 
 struct takeMeHomeWidgetEntryView : View
 {
-    var routeInformation: RouteInformation?
+    var routeInformation: RouteInformation
     
     var body: some View
     {
-        if (routeInformation != nil)
+        if (!routeInformation.route.isEmpty)
         {
             HStack
             {
-                TimelineView(from: routeInformation?.route.first?.entranceTime ?? .now,
-                         to: routeInformation?.route.last?.exitTime ?? .now,
-                             actual: routeInformation?.date ?? .now)
+                TimelineView(from: routeInformation.route.first?.entranceTime ?? .now,
+                         to: routeInformation.route.last?.exitTime ?? .now,
+                             actual: routeInformation.date)
                 Spacer()
-                RouteView(routeInformation: routeInformation!)
+                RouteView(routeInformation: routeInformation)
                 Spacer()
             }
         }
@@ -104,7 +133,7 @@ struct takeMeHomeWidgetEntryView : View
 
 struct takeMeHomeWidget: Widget
 {
-    let kind: String = "takeMeHomeWidgetDevWidget"
+    let kind: String = "takeMeHomeWidget"
 
     var body: some WidgetConfiguration
     {
@@ -128,7 +157,7 @@ struct takeMeHomeWidget: Widget
     }
 }
 
-#Preview(as: .systemSmall)
+#Preview(as: .systemLarge)
 {
     takeMeHomeWidget()
 }
