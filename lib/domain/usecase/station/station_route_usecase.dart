@@ -12,19 +12,36 @@ class GetStationRouteUseCase {
 
   GetStationRouteUseCase({required this.stationRepository});
 
-  // final String preferredTrainNamePoessneck = 'RE 80851';
-  // final String preferredTrainNamePoessneck = 'RB 80862';
-  // final String preferredTrainNamePoessneck = 'RB 80857';
-  final String preferredTrainNamePoessneck = 'RE 80859';
+  // see: https://www.erfurter-bahn.de/fahrplaene-netze/fahrplaene-liniennetz/linie/re-12-rb-22-3
+  final List<String> preferredTrainNamesPoessneck = [
+    'RB 80875',
+    'RB 80831',
+    'RB 80833',
+    'RB 80835',
+    'RB 80837',
+    'RB 81011',
+    'RE 80839',
+    'RB 80841',
+    'RE 80843',
+    'RB 80845',
+    'RE 80847',
+    'RB 80849',
+    'RE 80851',
+    'RB 80853',
+    'RB 80877',
+    'RE 80855',
+    'RB 80857',
+    'RE 80859',
+    'RB 80861',
+    'RB 80863',
+    'RE 80865',
+    'RB 80869',
+    'RB 80871',
+  ];
 
   List<StationEntity> get currentStations => _currentStations;
   List<MeansOfTransportEntity> get currentMeansOfTransport =>
       _currentMeansOfTransport;
-
-// hier davor bisschen laufen
-  // vom Start alles holem
-  // vom Ziel alles holen (da wo home ist)
-  // hier danach bisschen laufen
 
   Future<Either<Failure, bool>> execute(
     StationEntity startStation,
@@ -82,7 +99,7 @@ class GetStationRouteUseCase {
     List<MeansOfTransportEntity> meansOfTransportEntities,
   ) {
     for (final meansOfTransportEntity in meansOfTransportEntities) {
-      if (meansOfTransportEntity.name == preferredTrainNamePoessneck) {
+      if (preferredTrainNamesPoessneck.contains(meansOfTransportEntity.name)) {
         return meansOfTransportEntity;
       }
     }

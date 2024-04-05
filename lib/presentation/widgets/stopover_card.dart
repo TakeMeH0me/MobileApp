@@ -22,7 +22,7 @@ class _StopoverCardState extends State<StopoverCard> {
   Widget build(BuildContext context) {
     return Card(
       color: widget.meansOfTransport.isDelayed
-          ? Colors.red[100]
+          ? Theme.of(context).colorScheme.error
           : lightColorTheme.colorScheme.surface,
       child: ListTile(
         leading: _getLeadingIconByMeansOfTransportType(),
@@ -31,10 +31,20 @@ class _StopoverCardState extends State<StopoverCard> {
             : null,
         title:
             Text('${widget.meansOfTransport.name} von ${widget.station.name}'),
-        subtitle: widget.meansOfTransport.isDelayed
-            ? Text('Verspätung: ${widget.meansOfTransport.delayInMinutes} min')
-            : Text(
-                'Abfahrt: ${widget.meansOfTransport.departureTime.format(context)}'),
+        subtitle: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            widget.meansOfTransport.isDelayed
+                ? Text(
+                    'Verspätung: ${widget.meansOfTransport.delayInMinutes} min')
+                : const SizedBox.shrink(),
+            widget.meansOfTransport.isDelayed
+                ? Text(
+                    'Abfahrt: ${widget.meansOfTransport.departureTime.format(context)} -> ${_addTime(widget.meansOfTransport.departureTime, Duration(minutes: widget.meansOfTransport.delayInMinutes)).format(context)}')
+                : Text(
+                    'Abfahrt: ${widget.meansOfTransport.departureTime.format(context)}'),
+          ],
+        ),
       ),
     );
   }
@@ -50,5 +60,11 @@ class _StopoverCardState extends State<StopoverCard> {
       case MeansOfTransportType.unknown:
         return const Icon(Icons.question_mark);
     }
+  }
+
+  TimeOfDay _addTime(TimeOfDay timeOfDay, Duration duration) {
+    final newDateTime =
+        DateTime(0, 0, 0, timeOfDay.hour, timeOfDay.minute).add(duration);
+    return TimeOfDay(hour: newDateTime.hour, minute: newDateTime.minute);
   }
 }

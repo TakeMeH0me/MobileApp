@@ -30,6 +30,15 @@ class _ShowWayToHomePageState extends State<ShowWayToHomePage> {
   }
 
   void _initDefaultMeansOfTransport() {
+    final int currentHour = TimeOfDay.now().hour;
+    final int currentMinute = TimeOfDay.now().minute;
+    const int minDuration = 60;
+    final int endMinute = currentMinute + minDuration >= 60
+        ? (currentMinute + minDuration) - 60
+        : currentMinute + minDuration;
+    final int endHour =
+        currentMinute + minDuration >= 60 ? currentHour + 1 : currentHour;
+
     BlocProvider.of<StationBloc>(context).add(
       GetMeansOfTransportByTime(
         startStation: const StationEntity(
@@ -37,8 +46,14 @@ class _ShowWayToHomePageState extends State<ShowWayToHomePage> {
           name: 'Gera Hbf',
         ),
         endStation: widget.home.mainStation,
-        startTime: const TimeOfDay(hour: 17, minute: 40),
-        endTime: const TimeOfDay(hour: 18, minute: 40),
+        startTime: TimeOfDay(
+          hour: currentHour,
+          minute: currentMinute,
+        ),
+        endTime: TimeOfDay(
+          hour: endHour,
+          minute: endMinute,
+        ),
       ),
     );
   }
@@ -47,11 +62,13 @@ class _ShowWayToHomePageState extends State<ShowWayToHomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: SafeArea(
-        child: SingleChildScrollView(
-          child: Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
+        child: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: RefreshIndicator(
+            onRefresh: () async {
+              _initDefaultMeansOfTransport();
+            },
+            child: ListView(
               children: [
                 Text(
                   widget.home.name,
@@ -60,7 +77,7 @@ class _ShowWayToHomePageState extends State<ShowWayToHomePage> {
                 const SizedBox(height: 10.0),
                 _buildTimeIndicator(),
                 const SizedBox(height: 10.0),
-                _buildRouteList(),
+                Expanded(child: _buildRouteList()),
               ],
             ),
           ),
@@ -71,6 +88,10 @@ class _ShowWayToHomePageState extends State<ShowWayToHomePage> {
 
   BlocBuilder<StationBloc, StationState> _buildTimeIndicator() {
     return BlocBuilder<StationBloc, StationState>(
+      buildWhen: (previous, current) =>
+          current is StationInitial ||
+          current is StationsUpdated ||
+          current is StationError,
       builder: (context, state) {
         if (state is StationLoading) {
           return const Center(child: CircularProgressIndicator());
