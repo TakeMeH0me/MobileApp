@@ -7,6 +7,7 @@ import 'package:take_me_home/presentation/bloc/station/station_bloc.dart';
 import 'package:take_me_home/presentation/helper/time_transformer.dart';
 import 'package:take_me_home/presentation/router/app_router.dart';
 import 'package:take_me_home/presentation/router/args/edit_means_of_transport_card_args.dart';
+import 'package:take_me_home/presentation/widgets/between_means_of_transport_card_item.dart';
 import 'package:take_me_home/presentation/widgets/edit_means_of_transport_card.dart';
 import 'package:take_me_home/presentation/widgets/means_of_transport_card.dart';
 
@@ -77,7 +78,7 @@ class _ShowWayToHomePageState extends State<ShowWayToHomePage> {
         startTime: TimeOfDay.now(),
         endTime: TimeTransformer.addTime(
           TimeOfDay.now(),
-          const Duration(hours: 0, minutes: 50),
+          const Duration(hours: 0, minutes: 30),
         ),
       ),
     );
@@ -121,7 +122,7 @@ class _ShowWayToHomePageState extends State<ShowWayToHomePage> {
 
     return Text(
       'Du musst in ${diffTimeToStartGoingHome.hour}h und ${diffTimeToStartGoingHome.minute}min loslaufen!',
-      style: const TextStyle(fontSize: 16),
+      style: const TextStyle(fontSize: 16.0),
     );
   }
 
@@ -163,6 +164,7 @@ class _ShowWayToHomePageState extends State<ShowWayToHomePage> {
           );
 
           return Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               EditMeansOfTransportCard(
                 meansOfTransport: startMeansOfTransport,
@@ -173,13 +175,40 @@ class _ShowWayToHomePageState extends State<ShowWayToHomePage> {
                   );
                 },
               ),
-              const SizedBox(height: 10.0),
+              Padding(
+                padding: const EdgeInsets.only(left: 20.0),
+                child: BetweenMeansOfTransportCardItem(
+                  duration: startDuration,
+                ),
+              ),
               ListView.separated(
                 shrinkWrap: true,
                 physics: const NeverScrollableScrollPhysics(),
                 itemCount: stations.length,
-                separatorBuilder: (context, index) =>
-                    const SizedBox(height: 10.0),
+                separatorBuilder: (context, index) {
+                  if (index == stations.length - 1) {
+                    return const SizedBox.shrink();
+                  }
+
+                  final TimeOfDay duration = TimeTransformer.diffTime(
+                    meansOfTransportEntities[index + 1].departureTime,
+                    Duration(
+                      hours: meansOfTransportEntities[index].departureTime.hour,
+                      minutes:
+                          meansOfTransportEntities[index].departureTime.minute,
+                    ),
+                  );
+
+                  return Padding(
+                    padding: const EdgeInsets.only(left: 20.0),
+                    child: BetweenMeansOfTransportCardItem(
+                      duration: Duration(
+                        hours: duration.hour,
+                        minutes: duration.minute,
+                      ),
+                    ),
+                  );
+                },
                 itemBuilder: (context, index) {
                   return MeansOfTransportCard(
                     station: stations[index],
@@ -187,7 +216,12 @@ class _ShowWayToHomePageState extends State<ShowWayToHomePage> {
                   );
                 },
               ),
-              const SizedBox(height: 10.0),
+              Padding(
+                padding: const EdgeInsets.only(left: 20.0),
+                child: BetweenMeansOfTransportCardItem(
+                  duration: endDuration,
+                ),
+              ),
               EditMeansOfTransportCard(
                 meansOfTransport: endMeansOfTransport,
                 onEdit: (meansOfTransportEntity) {
