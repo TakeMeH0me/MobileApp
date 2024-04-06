@@ -3,7 +3,6 @@ import 'package:take_me_home/domain/entities/means_of_transport_entity.dart';
 import 'package:take_me_home/domain/entities/station_entity.dart';
 import 'package:take_me_home/presentation/helper/icon_transformer.dart';
 import 'package:take_me_home/presentation/helper/time_transformer.dart';
-import 'package:take_me_home/presentation/theme/color_themes.dart';
 
 class MeansOfTransportCard extends StatefulWidget {
   final StationEntity station;
@@ -27,7 +26,7 @@ class _MeansOfTransportCardState extends State<MeansOfTransportCard> {
           ? Theme.of(context).colorScheme.error
           : Theme.of(context).colorScheme.surface,
       child: ListTile(
-        leading: Icon(IconTransformer.fromMeansOfTransportType(
+        leading: Icon(MeansOfTransportTransportTransformer.getTypeAsIconData(
           widget.meansOfTransport.type,
         )),
         trailing: widget.meansOfTransport.isDelayed

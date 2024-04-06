@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 
 import 'package:take_me_home/app.dart';
-import 'package:take_me_home/presentation/pages/edit_means_of_transport_card_page.dart';
 import 'package:take_me_home/presentation/pages/pages.dart';
 import 'package:take_me_home/presentation/router/args/create_or_edit_home_args.dart';
 import 'package:take_me_home/presentation/router/args/edit_means_of_transport_card_args.dart';
@@ -42,6 +41,7 @@ class AppRouter {
         return MaterialPageRoute(
           builder: (_) => EditMeansOfTransportCardPage(
             meansOfTransport: args.meansOfTransport,
+            duration: args.duration,
           ),
         );
       default:

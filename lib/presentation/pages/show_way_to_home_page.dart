@@ -27,15 +27,43 @@ class ShowWayToHomePage extends StatefulWidget {
 }
 
 class _ShowWayToHomePageState extends State<ShowWayToHomePage> {
-  final MeansOfTransportEntity startMeansOfTransport =
+  MeansOfTransportEntity startMeansOfTransport =
       MeansOfTransportEntity.empty().copyWith(name: 'Zum Bahnhof');
-  final MeansOfTransportEntity endMeansOfTransport =
+  MeansOfTransportEntity endMeansOfTransport =
       MeansOfTransportEntity.empty().copyWith(name: 'Nach Hause');
+
+  Duration startDuration = const Duration();
+  Duration endDuration = const Duration();
 
   @override
   void initState() {
     super.initState();
     _initDefaultMeansOfTransport();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: SafeArea(
+        child: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: RefreshIndicator(
+            onRefresh: () async {
+              _initDefaultMeansOfTransport();
+            },
+            child: ListView(
+              children: [
+                _buildHeading(),
+                const SizedBox(height: 10.0),
+                _buildTimeIndicator(),
+                const SizedBox(height: 10.0),
+                Expanded(child: _buildRouteList()),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
   }
 
   void _initDefaultMeansOfTransport() {
@@ -55,31 +83,10 @@ class _ShowWayToHomePageState extends State<ShowWayToHomePage> {
     );
   }
 
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      body: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: RefreshIndicator(
-            onRefresh: () async {
-              _initDefaultMeansOfTransport();
-            },
-            child: ListView(
-              children: [
-                Text(
-                  widget.home.name,
-                  style: const TextStyle(fontSize: 30),
-                ),
-                const SizedBox(height: 10.0),
-                _buildTimeIndicator(),
-                const SizedBox(height: 10.0),
-                Expanded(child: _buildRouteList()),
-              ],
-            ),
-          ),
-        ),
-      ),
+  Text _buildHeading() {
+    return Text(
+      widget.home.name,
+      style: const TextStyle(fontSize: 25.0),
     );
   }
 
@@ -105,10 +112,10 @@ class _ShowWayToHomePageState extends State<ShowWayToHomePage> {
 
   Text _buildDiffTimeText() {
     final TimeOfDay diffTimeToStartGoingHome = TimeTransformer.diffTime(
-      TimeOfDay.now(),
+      startMeansOfTransport.departureTime,
       Duration(
-        hours: startMeansOfTransport.departureTime.hour,
-        minutes: startMeansOfTransport.departureTime.minute,
+        hours: TimeOfDay.now().hour,
+        minutes: TimeOfDay.now().minute,
       ),
     );
 
@@ -142,18 +149,37 @@ class _ShowWayToHomePageState extends State<ShowWayToHomePage> {
             return const Text('Error while loading stations: Length mismatch.');
           }
 
+          startMeansOfTransport = startMeansOfTransport.copyWith(
+            departureTime: TimeTransformer.diffTime(
+              meansOfTransportEntities.first.departureTime,
+              startDuration,
+            ),
+          );
+          endMeansOfTransport = endMeansOfTransport.copyWith(
+            departureTime: TimeTransformer.addTime(
+              meansOfTransportEntities.last.departureTime,
+              endDuration,
+            ),
+          );
+
           return Column(
             children: [
               EditMeansOfTransportCard(
-                  meansOfTransport: startMeansOfTransport,
-                  onEdit: (meansOfTransportEntity) {
-                    _navigateToEditMeansOfTransportCardPage(
-                        meansOfTransportEntity);
-                  }),
-              ListView.builder(
+                meansOfTransport: startMeansOfTransport,
+                onEdit: (meansOfTransportEntity) {
+                  _navigateToEditMeansOfTransportCardPage(
+                    meansOfTransportEntity,
+                    startDuration,
+                  );
+                },
+              ),
+              const SizedBox(height: 10.0),
+              ListView.separated(
                 shrinkWrap: true,
                 physics: const NeverScrollableScrollPhysics(),
                 itemCount: stations.length,
+                separatorBuilder: (context, index) =>
+                    const SizedBox(height: 10.0),
                 itemBuilder: (context, index) {
                   return MeansOfTransportCard(
                     station: stations[index],
@@ -161,12 +187,16 @@ class _ShowWayToHomePageState extends State<ShowWayToHomePage> {
                   );
                 },
               ),
+              const SizedBox(height: 10.0),
               EditMeansOfTransportCard(
-                  meansOfTransport: endMeansOfTransport,
-                  onEdit: (meansOfTransportEntity) {
-                    _navigateToEditMeansOfTransportCardPage(
-                        meansOfTransportEntity);
-                  }),
+                meansOfTransport: endMeansOfTransport,
+                onEdit: (meansOfTransportEntity) {
+                  _navigateToEditMeansOfTransportCardPage(
+                    meansOfTransportEntity,
+                    endDuration,
+                  );
+                },
+              ),
             ],
           );
         } else {
@@ -177,12 +207,30 @@ class _ShowWayToHomePageState extends State<ShowWayToHomePage> {
   }
 
   void _navigateToEditMeansOfTransportCardPage(
-      MeansOfTransportEntity meansOfTransport) {
-    Navigator.of(context).pushNamed(
+    MeansOfTransportEntity meansOfTransport,
+    Duration duration,
+  ) async {
+    final result = await Navigator.of(context).pushNamed(
       AppRouter.editMeansOfTransportCard,
       arguments: EditMeansOfTransportCardArgs(
-        meansOfTransport: meansOfTransport,
-      ),
+          meansOfTransport: meansOfTransport, duration: duration),
     );
+
+    if (result == null || !mounted) {
+      return;
+    }
+
+    final resultArgs = result as EditMeansOfTransportCardArgs;
+    if (meansOfTransport == startMeansOfTransport) {
+      setState(() {
+        startDuration = result.duration;
+        startMeansOfTransport = resultArgs.meansOfTransport;
+      });
+    } else {
+      setState(() {
+        endDuration = result.duration;
+        endMeansOfTransport = result.meansOfTransport;
+      });
+    }
   }
 }

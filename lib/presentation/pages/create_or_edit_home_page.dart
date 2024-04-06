@@ -83,13 +83,19 @@ class _CreateOrEditHomePageState extends State<CreateOrEditHomePage> {
               padding: const EdgeInsets.all(8.0),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  _buildStationSelectionEditCard(),
+                  _buildHeading(),
+                  const SizedBox(height: 10.0),
                   _buildHomeEditCard(),
+                  const SizedBox(height: 10.0),
+                  _buildStationSelectionEditCard(),
+                  const SizedBox(height: 10.0),
                   _buildCityEditCard(),
+                  const SizedBox(height: 10.0),
                   _buildStreetEditCard(),
+                  const SizedBox(height: 10.0),
                   _buildStreetNumberEditCard(),
+                  const SizedBox(height: 10.0),
                   _buildPostCodeEditCard(),
                 ],
               ),
@@ -110,6 +116,16 @@ class _CreateOrEditHomePageState extends State<CreateOrEditHomePage> {
     _cityController.dispose();
 
     super.dispose();
+  }
+
+  Widget _buildHeading() {
+    return Text(
+      widget.isNewHome ? 'Create Home' : 'Edit Home',
+      style: const TextStyle(
+        fontSize: 25.0,
+        fontWeight: FontWeight.bold,
+      ),
+    );
   }
 
   EditCard _buildStationSelectionEditCard() {
@@ -199,7 +215,7 @@ class _CreateOrEditHomePageState extends State<CreateOrEditHomePage> {
 
   Widget _buildBottomNavigationBar(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.all(20.0),
+      padding: const EdgeInsets.all(8.0),
       child: ElevatedButton(
         onPressed: () {
           if (widget.isNewHome) {

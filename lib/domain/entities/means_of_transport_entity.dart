@@ -27,11 +27,11 @@ class MeansOfTransportEntity extends Equatable {
     MeansOfTransportType? type,
   }) {
     return MeansOfTransportEntity(
-      name: name ?? '',
-      departureTime: departureTime ?? const TimeOfDay(hour: 0, minute: 0),
-      isCancelled: isCancelled ?? false,
-      delayInMinutes: delayInMinutes ?? 0,
-      type: type ?? MeansOfTransportType.unknown,
+      name: name ?? this.name,
+      departureTime: departureTime ?? this.departureTime,
+      isCancelled: isCancelled ?? this.isCancelled,
+      delayInMinutes: delayInMinutes ?? this.delayInMinutes,
+      type: type ?? this.type,
     );
   }
 

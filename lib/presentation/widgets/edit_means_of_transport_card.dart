@@ -24,7 +24,7 @@ class _EditMeansOfTransportCardState extends State<EditMeansOfTransportCard> {
     return Card(
       color: Theme.of(context).colorScheme.surface,
       child: ListTile(
-        leading: Icon(IconTransformer.fromMeansOfTransportType(
+        leading: Icon(MeansOfTransportTransportTransformer.getTypeAsIconData(
           widget.meansOfTransport.type,
         )),
         trailing: IconButton(
