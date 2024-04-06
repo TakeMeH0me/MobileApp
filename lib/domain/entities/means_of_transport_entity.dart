@@ -19,6 +19,32 @@ class MeansOfTransportEntity extends Equatable {
 
   bool get isDelayed => delayInMinutes > 0;
 
+  MeansOfTransportEntity copyWith({
+    String? name,
+    TimeOfDay? departureTime,
+    bool? isCancelled,
+    int? delayInMinutes,
+    MeansOfTransportType? type,
+  }) {
+    return MeansOfTransportEntity(
+      name: name ?? '',
+      departureTime: departureTime ?? const TimeOfDay(hour: 0, minute: 0),
+      isCancelled: isCancelled ?? false,
+      delayInMinutes: delayInMinutes ?? 0,
+      type: type ?? MeansOfTransportType.unknown,
+    );
+  }
+
+  factory MeansOfTransportEntity.empty() {
+    return const MeansOfTransportEntity(
+      name: '',
+      departureTime: TimeOfDay(hour: 0, minute: 0),
+      isCancelled: false,
+      delayInMinutes: 0,
+      type: MeansOfTransportType.unknown,
+    );
+  }
+
   @override
   List<Object?> get props => [
         name,
@@ -33,5 +59,6 @@ enum MeansOfTransportType {
   train,
   bus,
   tram,
+  walk,
   unknown,
 }

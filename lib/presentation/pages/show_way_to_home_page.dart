@@ -4,7 +4,9 @@ import 'package:take_me_home/domain/entities/home_entity.dart';
 import 'package:take_me_home/domain/entities/means_of_transport_entity.dart';
 import 'package:take_me_home/domain/entities/station_entity.dart';
 import 'package:take_me_home/presentation/bloc/station/station_bloc.dart';
-import 'package:take_me_home/presentation/widgets/stopover_card.dart';
+import 'package:take_me_home/presentation/helper/time_transformer.dart';
+import 'package:take_me_home/presentation/widgets/edit_means_of_transport_card.dart';
+import 'package:take_me_home/presentation/widgets/means_of_transport_card.dart';
 
 /// Show one trip to the selected home with single stations,
 /// time between the stations and information to each single station.
@@ -23,6 +25,11 @@ class ShowWayToHomePage extends StatefulWidget {
 }
 
 class _ShowWayToHomePageState extends State<ShowWayToHomePage> {
+  final MeansOfTransportEntity startMeansOfTransport =
+      MeansOfTransportEntity.empty().copyWith(name: 'Zum Bahnhof');
+  final MeansOfTransportEntity endMeansOfTransport =
+      MeansOfTransportEntity.empty().copyWith(name: 'Nach Hause');
+
   @override
   void initState() {
     super.initState();
@@ -30,15 +37,6 @@ class _ShowWayToHomePageState extends State<ShowWayToHomePage> {
   }
 
   void _initDefaultMeansOfTransport() {
-    final int currentHour = TimeOfDay.now().hour;
-    final int currentMinute = TimeOfDay.now().minute;
-    const int minDuration = 60;
-    final int endMinute = currentMinute + minDuration >= 60
-        ? (currentMinute + minDuration) - 60
-        : currentMinute + minDuration;
-    final int endHour =
-        currentMinute + minDuration >= 60 ? currentHour + 1 : currentHour;
-
     BlocProvider.of<StationBloc>(context).add(
       GetMeansOfTransportByTime(
         startStation: const StationEntity(
@@ -46,13 +44,10 @@ class _ShowWayToHomePageState extends State<ShowWayToHomePage> {
           name: 'Gera Hbf',
         ),
         endStation: widget.home.mainStation,
-        startTime: TimeOfDay(
-          hour: currentHour,
-          minute: currentMinute,
-        ),
-        endTime: TimeOfDay(
-          hour: endHour,
-          minute: endMinute,
+        startTime: TimeOfDay.now(),
+        endTime: TimeTransformer.addTime(
+          TimeOfDay.now(),
+          const Duration(hours: 0, minutes: 50),
         ),
       ),
     );
@@ -98,16 +93,26 @@ class _ShowWayToHomePageState extends State<ShowWayToHomePage> {
         } else if (state is StationError) {
           return Text(state.message);
         } else if (state is StationsUpdated) {
-          final TimeOfDay time =
-              state.meansOfTransportEntities[0].departureTime;
-          return Text(
-            'Du musst in  ${time.hour - TimeOfDay.now().hour}h und ${time.minute - TimeOfDay.now().minute}min .${time.toString()} loslaufen!',
-            style: const TextStyle(fontSize: 16),
-          );
+          return _buildDiffTimeText();
         } else {
           return const SizedBox.shrink();
         }
       },
+    );
+  }
+
+  Text _buildDiffTimeText() {
+    final TimeOfDay diffTimeToStartGoingHome = TimeTransformer.diffTime(
+      TimeOfDay.now(),
+      Duration(
+        hours: startMeansOfTransport.departureTime.hour,
+        minutes: startMeansOfTransport.departureTime.minute,
+      ),
+    );
+
+    return Text(
+      'Du musst in ${diffTimeToStartGoingHome.hour}h und ${diffTimeToStartGoingHome.minute}min loslaufen!',
+      style: const TextStyle(fontSize: 16),
     );
   }
 
@@ -135,16 +140,26 @@ class _ShowWayToHomePageState extends State<ShowWayToHomePage> {
             return const Text('Error while loading stations: Length mismatch.');
           }
 
-          return ListView.builder(
-            shrinkWrap: true,
-            physics: const NeverScrollableScrollPhysics(),
-            itemCount: stations.length,
-            itemBuilder: (context, index) {
-              return StopoverCard(
-                station: stations[index],
-                meansOfTransport: meansOfTransportEntities[index],
-              );
-            },
+          return Column(
+            children: [
+              EditMeansOfTransportCard(
+                  meansOfTransport: startMeansOfTransport,
+                  onEdit: (meansOfTransportEntity) {}),
+              ListView.builder(
+                shrinkWrap: true,
+                physics: const NeverScrollableScrollPhysics(),
+                itemCount: stations.length,
+                itemBuilder: (context, index) {
+                  return MeansOfTransportCard(
+                    station: stations[index],
+                    meansOfTransport: meansOfTransportEntities[index],
+                  );
+                },
+              ),
+              EditMeansOfTransportCard(
+                  meansOfTransport: endMeansOfTransport,
+                  onEdit: (meansOfTransportEntity) {}),
+            ],
           );
         } else {
           return const SizedBox.shrink();
