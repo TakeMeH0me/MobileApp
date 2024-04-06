@@ -4,7 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:take_me_home/domain/entities/home_entity.dart';
 import 'package:take_me_home/domain/entities/station_entity.dart';
 import 'package:take_me_home/presentation/bloc/home/home_bloc.dart';
-import 'package:take_me_home/presentation/theme/color_themes.dart';
+import 'package:take_me_home/presentation/widgets/edit_card.dart';
 
 /// A home can be created ([isEditing] = false) or edited ([isEditing] = true) with this page.
 ///
@@ -79,83 +79,18 @@ class _CreateOrEditHomePageState extends State<CreateOrEditHomePage> {
       body: SafeArea(
         child: Scrollbar(
           child: SingleChildScrollView(
-            physics: const AlwaysScrollableScrollPhysics(),
             child: Padding(
               padding: const EdgeInsets.all(8.0),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Card(
-                    color: lightColorTheme.colorScheme.surface,
-                    child: ListTile(
-                      leading: const Icon(Icons.train),
-                      title: _buildStationSelection(),
-                    ),
-                  ),
-                  const SizedBox(height: 10.0),
-                  Card(
-                    color: lightColorTheme.colorScheme.surface,
-                    child: ListTile(
-                      title: TextField(
-                        controller: _homeNameController,
-                        decoration: const InputDecoration(
-                          labelText: 'Home Name',
-                        ),
-                      ),
-                    ),
-                  ),
-                  const SizedBox(height: 10.0),
-                  Card(
-                    color: lightColorTheme.colorScheme.surface,
-                    child: ListTile(
-                      title: TextField(
-                        controller: _cityController,
-                        decoration: const InputDecoration(
-                          labelText: 'City',
-                        ),
-                      ),
-                    ),
-                  ),
-                  const SizedBox(height: 10.0),
-                  Card(
-                      color: lightColorTheme.colorScheme.surface,
-                      child: ListTile(
-                        title: TextField(
-                          controller: _streetController,
-                          decoration: const InputDecoration(
-                            labelText: 'Street',
-                          ),
-                        ),
-                      )),
-                  const SizedBox(height: 10.0),
-                  Card(
-                      color: lightColorTheme.colorScheme.surface,
-                      child: ListTile(
-                        title: TextField(
-                          controller: _streetNumberController,
-                          decoration: const InputDecoration(
-                            labelText: 'Street Number',
-                          ),
-                          maxLength: 4,
-                        ),
-                      )),
-                  const SizedBox(height: 10.0),
-                  Card(
-                      color: lightColorTheme.colorScheme.surface,
-                      child: ListTile(
-                        title: TextField(
-                          controller: _postcodeController,
-                          decoration: const InputDecoration(
-                            labelText: 'Postcode',
-                          ),
-                          inputFormatters: [
-                            FilteringTextInputFormatter.digitsOnly
-                          ],
-                          maxLength: 5,
-                          keyboardType: TextInputType.number,
-                        ),
-                      )),
-                  const SizedBox(height: 10.0),
+                  _buildStationSelectionEditCard(),
+                  _buildHomeEditCard(),
+                  _buildCityEditCard(),
+                  _buildStreetEditCard(),
+                  _buildStreetNumberEditCard(),
+                  _buildPostCodeEditCard(),
                 ],
               ),
             ),
@@ -163,6 +98,83 @@ class _CreateOrEditHomePageState extends State<CreateOrEditHomePage> {
         ),
       ),
       bottomNavigationBar: _buildBottomNavigationBar(context),
+    );
+  }
+
+  @override
+  void dispose() {
+    _homeNameController.dispose();
+    _streetController.dispose();
+    _streetNumberController.dispose();
+    _postcodeController.dispose();
+    _cityController.dispose();
+
+    super.dispose();
+  }
+
+  EditCard _buildStationSelectionEditCard() {
+    return EditCard(
+      leadingIcon: const Icon(Icons.train),
+      mainContent: _buildStationSelection(),
+    );
+  }
+
+  EditCard _buildHomeEditCard() {
+    return EditCard(
+      mainContent: TextField(
+        controller: _homeNameController,
+        decoration: const InputDecoration(
+          labelText: 'Home',
+        ),
+      ),
+    );
+  }
+
+  EditCard _buildCityEditCard() {
+    return EditCard(
+      mainContent: TextField(
+        controller: _cityController,
+        decoration: const InputDecoration(
+          labelText: 'City',
+        ),
+      ),
+    );
+  }
+
+  EditCard _buildStreetEditCard() {
+    return EditCard(
+      mainContent: TextField(
+        controller: _streetController,
+        decoration: const InputDecoration(
+          labelText: 'Street',
+        ),
+      ),
+    );
+  }
+
+  EditCard _buildStreetNumberEditCard() {
+    return EditCard(
+      mainContent: TextField(
+        controller: _streetNumberController,
+        decoration: const InputDecoration(
+          labelText: 'Street Number',
+        ),
+        maxLength: 4,
+      ),
+    );
+  }
+
+  EditCard _buildPostCodeEditCard() {
+    return EditCard(
+      mainContent: TextField(
+        controller: _postcodeController,
+        decoration: const InputDecoration(
+          labelText: 'Postcode',
+        ),
+        inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+        maxLength: 5,
+        keyboardType: TextInputType.number,
+      ),
     );
   }
 
@@ -183,17 +195,6 @@ class _CreateOrEditHomePageState extends State<CreateOrEditHomePage> {
         });
       },
     );
-  }
-
-  @override
-  void dispose() {
-    _homeNameController.dispose();
-    _streetController.dispose();
-    _streetNumberController.dispose();
-    _postcodeController.dispose();
-    _cityController.dispose();
-
-    super.dispose();
   }
 
   Widget _buildBottomNavigationBar(BuildContext context) {

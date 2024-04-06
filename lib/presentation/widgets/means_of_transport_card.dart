@@ -25,7 +25,7 @@ class _MeansOfTransportCardState extends State<MeansOfTransportCard> {
     return Card(
       color: widget.meansOfTransport.isDelayed
           ? Theme.of(context).colorScheme.error
-          : lightColorTheme.colorScheme.surface,
+          : Theme.of(context).colorScheme.surface,
       child: ListTile(
         leading: Icon(IconTransformer.fromMeansOfTransportType(
           widget.meansOfTransport.type,

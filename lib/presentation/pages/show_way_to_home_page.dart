@@ -5,6 +5,8 @@ import 'package:take_me_home/domain/entities/means_of_transport_entity.dart';
 import 'package:take_me_home/domain/entities/station_entity.dart';
 import 'package:take_me_home/presentation/bloc/station/station_bloc.dart';
 import 'package:take_me_home/presentation/helper/time_transformer.dart';
+import 'package:take_me_home/presentation/router/app_router.dart';
+import 'package:take_me_home/presentation/router/args/edit_means_of_transport_card_args.dart';
 import 'package:take_me_home/presentation/widgets/edit_means_of_transport_card.dart';
 import 'package:take_me_home/presentation/widgets/means_of_transport_card.dart';
 
@@ -144,7 +146,10 @@ class _ShowWayToHomePageState extends State<ShowWayToHomePage> {
             children: [
               EditMeansOfTransportCard(
                   meansOfTransport: startMeansOfTransport,
-                  onEdit: (meansOfTransportEntity) {}),
+                  onEdit: (meansOfTransportEntity) {
+                    _navigateToEditMeansOfTransportCardPage(
+                        meansOfTransportEntity);
+                  }),
               ListView.builder(
                 shrinkWrap: true,
                 physics: const NeverScrollableScrollPhysics(),
@@ -158,13 +163,26 @@ class _ShowWayToHomePageState extends State<ShowWayToHomePage> {
               ),
               EditMeansOfTransportCard(
                   meansOfTransport: endMeansOfTransport,
-                  onEdit: (meansOfTransportEntity) {}),
+                  onEdit: (meansOfTransportEntity) {
+                    _navigateToEditMeansOfTransportCardPage(
+                        meansOfTransportEntity);
+                  }),
             ],
           );
         } else {
           return const SizedBox.shrink();
         }
       },
+    );
+  }
+
+  void _navigateToEditMeansOfTransportCardPage(
+      MeansOfTransportEntity meansOfTransport) {
+    Navigator.of(context).pushNamed(
+      AppRouter.editMeansOfTransportCard,
+      arguments: EditMeansOfTransportCardArgs(
+        meansOfTransport: meansOfTransport,
+      ),
     );
   }
 }

@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:take_me_home/domain/entities/means_of_transport_entity.dart';
 import 'package:take_me_home/presentation/helper/icon_transformer.dart';
 import 'package:take_me_home/presentation/helper/time_transformer.dart';
-import 'package:take_me_home/presentation/theme/color_themes.dart';
 
 class EditMeansOfTransportCard extends StatefulWidget {
   final MeansOfTransportEntity meansOfTransport;
@@ -23,7 +22,7 @@ class _EditMeansOfTransportCardState extends State<EditMeansOfTransportCard> {
   @override
   Widget build(BuildContext context) {
     return Card(
-      color: lightColorTheme.colorScheme.surface,
+      color: Theme.of(context).colorScheme.surface,
       child: ListTile(
         leading: Icon(IconTransformer.fromMeansOfTransportType(
           widget.meansOfTransport.type,
