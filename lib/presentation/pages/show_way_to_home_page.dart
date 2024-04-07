@@ -96,8 +96,6 @@ class _ShowWayToHomePageState extends State<ShowWayToHomePage> {
           : RouteInformationAdapter.toRouteInformation(mot).toJson().toString(),
     );
 
-    print(RouteInformationAdapter.toRouteInformation(mot!).toJson().toString());
-
     HomeWidget.updateWidget(
       iOSName: 'takeMeHomeWidget',
     );
@@ -195,11 +193,11 @@ class _ShowWayToHomePageState extends State<ShowWayToHomePage> {
           );
 
           // TODO: wenn in dieser Page, dann in Widget anzeigen
-          // updateRouteInformation([
-          //   startMeansOfTransport,
-          //   ...meansOfTransportEntities,
-          //   endMeansOfTransport
-          // ]);
+          updateRouteInformation([
+            startMeansOfTransport,
+            ...meansOfTransportEntities,
+            endMeansOfTransport
+          ]);
 
           return Column(
             crossAxisAlignment: CrossAxisAlignment.start,
