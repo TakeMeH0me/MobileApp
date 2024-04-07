@@ -39,52 +39,52 @@ class _WidgetDataTransferTestPageState
                   route: [
                     types.RoutePart(
                         vehicle: VehicleType.tram,
-                        lineName: "3",
-                        lineDestination: "Friedrich Engels Straße",
-                        entrance: "DHGE",
+                        lineName: '3',
+                        lineDestination: 'Friedrich Engels Straße',
+                        entrance: 'DHGE',
                         entranceTime:
                             DateTime.fromMicrosecondsSinceEpoch(1708523280),
-                        exit: "Friedrich Engels Straße",
+                        exit: 'Friedrich Engels Straße',
                         exitTime:
                             DateTime.fromMicrosecondsSinceEpoch(1708524000)),
                     types.RoutePart(
                         vehicle: VehicleType.walk,
-                        lineName: "",
-                        lineDestination: "",
-                        entrance: "Friedrich Engels Straße",
+                        lineName: '',
+                        lineDestination: '',
+                        entrance: 'Friedrich Engels Straße',
                         entranceTime:
                             DateTime.fromMicrosecondsSinceEpoch(1708524000),
-                        exit: "Gera Hbf",
+                        exit: 'Gera Hbf',
                         exitTime:
                             DateTime.fromMicrosecondsSinceEpoch(1708524300)),
                     types.RoutePart(
                         vehicle: VehicleType.train,
-                        lineName: "RE1",
-                        lineDestination: "Göttingen",
-                        entrance: "Gera Hbf",
+                        lineName: 'RE1',
+                        lineDestination: 'Göttingen',
+                        entrance: 'Gera Hbf',
                         entranceTime:
                             DateTime.fromMicrosecondsSinceEpoch(1708524300),
-                        exit: "Erfurt Hbf",
+                        exit: 'Erfurt Hbf',
                         exitTime:
                             DateTime.fromMicrosecondsSinceEpoch(1708526700)),
                     types.RoutePart(
                         vehicle: VehicleType.tram,
-                        lineName: "5",
-                        lineDestination: "Zoopark",
-                        entrance: "Erfurt Hbf",
+                        lineName: '5',
+                        lineDestination: 'Zoopark',
+                        entrance: 'Erfurt Hbf',
                         entranceTime:
                             DateTime.fromMicrosecondsSinceEpoch(1708526700),
-                        exit: "Lutherkirche",
+                        exit: 'Lutherkirche',
                         exitTime:
                             DateTime.fromMicrosecondsSinceEpoch(1708527300)),
                     types.RoutePart(
                         vehicle: VehicleType.walk,
-                        lineName: "",
-                        lineDestination: "",
-                        entrance: "Lutherkirche",
+                        lineName: '',
+                        lineDestination: '',
+                        entrance: 'Lutherkirche',
                         entranceTime:
                             DateTime.fromMicrosecondsSinceEpoch(1708527300),
-                        exit: "Schobersmühlenweg",
+                        exit: 'Schobersmühlenweg',
                         exitTime:
                             DateTime.fromMicrosecondsSinceEpoch(1708527600)),
                   ]);

@@ -22,11 +22,16 @@
 
 ## Development
 
+- Verwendung der Stable-Flutter-Version:
+  ```bash
+  flutter channel stable
+  flutter updrade
+  ```
+
 ### Formatting
 
 - Install VSCode-Extension: [Flutter](https://marketplace.visualstudio.com/items?itemName=Dart-Code.flutter)
 - Adjust settings to automatically format on save: `editor.formatOnSave` setting to `true`
-- Install VSCOde-Extension for import formatting: [dart-import](https://marketplace.visualstudio.com/items?itemName=luanpotter.dart-import)
-- Before starting a pull request run this in the command palette **TWICE** to format all imports: `Fix All Imports`
+- Make sure to only use package imports before submitting a PR. (not relative ones)
 
 <p align="right">(<a href="#readme_top">back to top</a>)</p>

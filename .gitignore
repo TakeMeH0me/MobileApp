@@ -1,3 +1,6 @@
+# own ones
+.vscode/*
+
 # Miscellaneous
 *.class
 *.log
