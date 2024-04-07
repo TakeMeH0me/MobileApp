@@ -14,10 +14,18 @@ class RouteInformationAdapter {
               lineDestination: 'Saalfeld(Saale) Hbf',
               entrance: 'Gera Hbf',
               entranceTime: DateTime(
-                  0, 0, 0, e.departureTime.hour, e.departureTime.minute),
+                  DateTime.now().year,
+                  DateTime.now().month,
+                  DateTime.now().day,
+                  e.departureTime.hour,
+                  e.departureTime.minute),
               exit: 'Pößneck ob. Bhf',
               exitTime: DateTime(
-                  0, 0, 0, e.departureTime.hour, e.departureTime.minute),
+                  DateTime.now().year,
+                  DateTime.now().month,
+                  DateTime.now().day,
+                  e.departureTime.hour,
+                  e.departureTime.minute),
             ),
           )
           .toList(),

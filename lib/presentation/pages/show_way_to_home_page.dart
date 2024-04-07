@@ -96,6 +96,8 @@ class _ShowWayToHomePageState extends State<ShowWayToHomePage> {
           : RouteInformationAdapter.toRouteInformation(mot).toJson().toString(),
     );
 
+    print(RouteInformationAdapter.toRouteInformation(mot!).toJson().toString());
+
     HomeWidget.updateWidget(
       iOSName: 'takeMeHomeWidget',
     );
