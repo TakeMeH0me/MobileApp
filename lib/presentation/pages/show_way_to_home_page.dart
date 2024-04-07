@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:home_widget/home_widget.dart';
+import 'package:take_me_home/core/widget_adapter.dart';
 import 'package:take_me_home/domain/entities/home_entity.dart';
 import 'package:take_me_home/domain/entities/means_of_transport_entity.dart';
 import 'package:take_me_home/domain/entities/station_entity.dart';
+import 'package:take_me_home/main.dart';
 import 'package:take_me_home/presentation/bloc/station/station_bloc.dart';
 import 'package:take_me_home/presentation/helper/time_transformer.dart';
 import 'package:take_me_home/presentation/router/app_router.dart';
@@ -84,6 +87,20 @@ class _ShowWayToHomePageState extends State<ShowWayToHomePage> {
     );
   }
 
+  void updateRouteInformation(List<MeansOfTransportEntity>? mot) {
+    HomeWidget.setAppGroupId(MainApp.appGroupId);
+    HomeWidget.saveWidgetData<String>(
+      'routeinformation_json',
+      mot == null
+          ? null
+          : RouteInformationAdapter.toRouteInformation(mot).toJson().toString(),
+    );
+
+    HomeWidget.updateWidget(
+      iOSName: 'takeMeHomeWidget',
+    );
+  }
+
   Text _buildHeading() {
     return Text(
       widget.home.name,
@@ -162,6 +179,13 @@ class _ShowWayToHomePageState extends State<ShowWayToHomePage> {
               endDuration,
             ),
           );
+
+          // TODO: wenn in dieser Page, dann in Widget anzeigen
+          updateRouteInformation([
+            startMeansOfTransport,
+            ...meansOfTransportEntities,
+            endMeansOfTransport
+          ]);
 
           return Column(
             crossAxisAlignment: CrossAxisAlignment.start,

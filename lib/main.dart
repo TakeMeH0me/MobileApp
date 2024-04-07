@@ -42,7 +42,8 @@ class MainApp extends StatelessWidget {
     super.key,
   });
 
-  static String get title => 'Take Me Home';
+  static const String title = 'Take Me Home';
+  static const String appGroupId = 'group.takemehome';
 
   @override
   Widget build(BuildContext context) {

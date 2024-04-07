@@ -19,7 +19,6 @@ dependencies:
   http: ^1.2.0
   internet_connection_checker: ^1.0.0+1
   supabase_flutter: ^2.4.0
-  home_widget: ^0.3.0
 
 dev_dependencies:
   flutter_test:
