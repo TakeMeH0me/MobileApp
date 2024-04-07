@@ -131,6 +131,13 @@ class _ShowWayToHomePageState extends State<ShowWayToHomePage> {
   }
 
   Text _buildDiffTimeText() {
+    if (isNotReachableInTime(startMeansOfTransport.departureTime)) {
+      return const Text(
+        'Du schaffst es leider nicht mehr! :(',
+        style: TextStyle(fontSize: 16.0),
+      );
+    }
+
     final TimeOfDay diffTimeToStartGoingHome = TimeTransformer.diffTime(
       startMeansOfTransport.departureTime,
       Duration(
@@ -143,6 +150,11 @@ class _ShowWayToHomePageState extends State<ShowWayToHomePage> {
       'Du musst in ${diffTimeToStartGoingHome.hour}h und ${diffTimeToStartGoingHome.minute}min loslaufen!',
       style: const TextStyle(fontSize: 16.0),
     );
+  }
+
+  bool isNotReachableInTime(TimeOfDay time) {
+    return time.hour - TimeOfDay.now().hour < 0 ||
+        time.minute - TimeOfDay.now().minute < 0;
   }
 
   BlocBuilder<StationBloc, StationState> _buildRouteList() {
@@ -183,11 +195,11 @@ class _ShowWayToHomePageState extends State<ShowWayToHomePage> {
           );
 
           // TODO: wenn in dieser Page, dann in Widget anzeigen
-          updateRouteInformation([
-            startMeansOfTransport,
-            ...meansOfTransportEntities,
-            endMeansOfTransport
-          ]);
+          // updateRouteInformation([
+          //   startMeansOfTransport,
+          //   ...meansOfTransportEntities,
+          //   endMeansOfTransport
+          // ]);
 
           return Column(
             crossAxisAlignment: CrossAxisAlignment.start,
