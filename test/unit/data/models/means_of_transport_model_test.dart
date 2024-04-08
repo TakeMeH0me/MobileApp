@@ -4,21 +4,45 @@ import 'package:take_me_home/data/models/means_of_transport_model.dart';
 import 'package:take_me_home/domain/entities/means_of_transport_entity.dart';
 
 void main() {
-  final tMeansOfTransportModel = MeansOfTransportModel(
-    name: 'test',
-    departureTime: TimeOfDay.now(),
-    isCancelled: false,
-    delayInMinutes: 0,
-  );
-
   test(
     'Should be a subclass of MeansOfTransportEntity.',
     () async {
+      final tMeansOfTransportModel = MeansOfTransportModel(
+        name: 'test',
+        departureTime: TimeOfDay.now(),
+        isCancelled: false,
+        delayInMinutes: 0,
+        type: MeansOfTransportType.unknown,
+      );
       expect(tMeansOfTransportModel, isA<MeansOfTransportEntity>());
     },
   );
 
   group('fromPlainText', () {
+    void testMeansOfTransportType(
+        MeansOfTransportType type, String typeAsString) {
+      test(
+        'Should return a valid model when the input is "12:00\n$typeAsString\n0".',
+        () async {
+          // arrange
+          final List<String> input = ['12:00', typeAsString, '0'];
+          final expected = MeansOfTransportModel(
+            name: typeAsString,
+            departureTime: const TimeOfDay(hour: 12, minute: 0),
+            isCancelled: false,
+            delayInMinutes: 0,
+            type: type,
+          );
+
+          // act
+          final actual = MeansOfTransportModel.fromPlainText(input);
+
+          // assert
+          expect(actual, expected);
+        },
+      );
+    }
+
     test(
       'Should return a valid model when the input is "12:00\ntest\nno".',
       () async {
@@ -29,6 +53,7 @@ void main() {
           departureTime: TimeOfDay(hour: 12, minute: 0),
           isCancelled: false,
           delayInMinutes: 0,
+          type: MeansOfTransportType.unknown,
         );
 
         // act
@@ -49,6 +74,7 @@ void main() {
           departureTime: TimeOfDay(hour: 12, minute: 0),
           isCancelled: true,
           delayInMinutes: 0,
+          type: MeansOfTransportType.unknown,
         );
 
         // act
@@ -69,6 +95,7 @@ void main() {
           departureTime: TimeOfDay(hour: 12, minute: 0),
           isCancelled: false,
           delayInMinutes: 5,
+          type: MeansOfTransportType.unknown,
         );
 
         // act
@@ -89,6 +116,7 @@ void main() {
           departureTime: TimeOfDay(hour: 12, minute: 0),
           isCancelled: false,
           delayInMinutes: 0,
+          type: MeansOfTransportType.unknown,
         );
 
         // act
@@ -98,5 +126,10 @@ void main() {
         expect(actual, expected);
       },
     );
+
+    testMeansOfTransportType(MeansOfTransportType.bus, 'Bus 500');
+    testMeansOfTransportType(MeansOfTransportType.train, 'RB 500');
+    testMeansOfTransportType(MeansOfTransportType.tram, 'S 3');
+    testMeansOfTransportType(MeansOfTransportType.unknown, 'test');
   });
 }

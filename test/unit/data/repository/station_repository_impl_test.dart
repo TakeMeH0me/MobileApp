@@ -40,6 +40,7 @@ void main() {
     departureTime: TimeOfDay(hour: 0, minute: 0),
     isCancelled: false,
     delayInMinutes: 0,
+    type: MeansOfTransportType.unknown,
   );
 
   setUpAll(() {

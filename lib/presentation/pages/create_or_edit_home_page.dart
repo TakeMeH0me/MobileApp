@@ -76,6 +76,7 @@ class _CreateOrEditHomePageState extends State<CreateOrEditHomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      key: const ValueKey('padding'),
       body: SafeArea(
         child: Scrollbar(
           child: SingleChildScrollView(
@@ -148,6 +149,7 @@ class _CreateOrEditHomePageState extends State<CreateOrEditHomePage> {
 
   EditCard _buildCityEditCard() {
     return EditCard(
+      key: const ValueKey('city_edit_card'),
       mainContent: TextField(
         controller: _cityController,
         decoration: const InputDecoration(
