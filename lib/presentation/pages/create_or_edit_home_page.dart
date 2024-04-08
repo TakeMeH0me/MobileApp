@@ -4,11 +4,11 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:take_me_home/domain/entities/home_entity.dart';
 import 'package:take_me_home/domain/entities/station_entity.dart';
 import 'package:take_me_home/presentation/bloc/home/home_bloc.dart';
-import 'package:take_me_home/presentation/widgets/edit_card.dart';
+import 'package:take_me_home/presentation/widgets/widgets.dart';
 
-/// A home can be created ([isEditing] = false) or edited ([isEditing] = true) with this page.
+/// A home can be created ([isNewHome] = true) or edited ([isNewHome] = false) with this page.
 ///
-/// Adjusts the UI based on the [isEditing] value.
+/// Adjusts the UI based on the [isNewHome] value.
 class CreateOrEditHomePage extends StatefulWidget {
   final HomeEntity home;
   final bool isNewHome;

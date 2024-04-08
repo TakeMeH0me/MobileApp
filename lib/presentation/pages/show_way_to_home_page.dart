@@ -12,11 +12,9 @@ import 'package:take_me_home/presentation/bloc/station/station_bloc.dart';
 import 'package:take_me_home/presentation/helper/time_transformer.dart';
 import 'package:take_me_home/presentation/router/app_router.dart';
 import 'package:take_me_home/presentation/router/args/edit_means_of_transport_card_args.dart';
-import 'package:take_me_home/presentation/widgets/between_means_of_transport_card_item.dart';
-import 'package:take_me_home/presentation/widgets/edit_means_of_transport_card.dart';
-import 'package:take_me_home/presentation/widgets/means_of_transport_card.dart';
+import 'package:take_me_home/presentation/widgets/widgets.dart';
 
-/// Show one trip to the selected home with single stations,
+/// Show one trip to the selected home with single stations that have to be passed,
 /// time between the stations and information to each single station.
 ///
 /// The home was selected in [ShowHomesPage].
@@ -219,7 +217,7 @@ class _ShowWayToHomePageState extends State<ShowWayToHomePage> {
               ),
               Padding(
                 padding: const EdgeInsets.only(left: 20.0),
-                child: BetweenMeansOfTransportCardItem(
+                child: VerticalDashedLines(
                   duration: startDuration,
                 ),
               ),
@@ -243,7 +241,7 @@ class _ShowWayToHomePageState extends State<ShowWayToHomePage> {
 
                   return Padding(
                     padding: const EdgeInsets.only(left: 20.0),
-                    child: BetweenMeansOfTransportCardItem(
+                    child: VerticalDashedLines(
                       duration: Duration(
                         hours: duration.hour,
                         minutes: duration.minute,
@@ -260,7 +258,7 @@ class _ShowWayToHomePageState extends State<ShowWayToHomePage> {
               ),
               Padding(
                 padding: const EdgeInsets.only(left: 20.0),
-                child: BetweenMeansOfTransportCardItem(
+                child: VerticalDashedLines(
                   duration: endDuration,
                 ),
               ),

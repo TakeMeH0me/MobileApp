@@ -8,6 +8,7 @@ import 'package:take_me_home/domain/entities/means_of_transport_entity.dart';
 import 'package:take_me_home/domain/entities/station_entity.dart';
 import 'package:take_me_home/domain/repository/station_repository.dart';
 
+/// Implementation of the [StationRepository] interface.
 class StationRepositoryImpl implements StationRepository {
   final StationRemoteDataSource remoteDataSource;
   final NetworkInfo networkInfo;

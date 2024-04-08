@@ -13,6 +13,10 @@ abstract class StationRemoteDataSource {
       StationEntity station, TimeOfDay time);
 }
 
+/// Implementation of the [StationRemoteDataSource] interface for the inofficial Deutsche Bahn API.
+///
+/// Reference for more information:
+/// https://hackmd.io/@SOYbid3rTROn8Sw3RQOucg/BkrWNDbT7?type=view#2-Request-Live-Timetable-with-station-from-Locationrequest-via-not-so-official-API
 class StationRemoteDataSourceImpl implements StationRemoteDataSource {
   final http.Client httpClient;
 

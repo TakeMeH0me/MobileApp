@@ -19,25 +19,23 @@ class _AppState extends State<App> {
   Widget build(BuildContext context) {
     return Scaffold(
       floatingActionButton: FloatingActionButton(
-        onPressed: () async {
-          final HomeEntity? newHome = await Navigator.of(context).pushNamed(
-            AppRouter.createOrEditHome,
-            arguments: CreateOrEditHomeArgs(
-              home: HomeEntity
-                  .empty(), // Assuming HomeEntity.empty() is a valid constructor for a new instance
-              isNewHome: true,
-            ),
-          ) as HomeEntity?;
-
-          if (newHome != null) {
-            // You need a mechanism here to add this `newHome` to your homes list in ShowHomesPage
-            // This could be a direct method call if you have access, or an event you can fire, or using a state management solution
-          }
+        onPressed: () {
+          _navigateToCreateOrEditHome(context);
         },
         child: const Icon(Icons.add),
       ),
       body: const SafeArea(
         child: ShowHomesPage(),
+      ),
+    );
+  }
+
+  void _navigateToCreateOrEditHome(BuildContext context) {
+    Navigator.of(context).pushNamed(
+      AppRouter.createOrEditHome,
+      arguments: CreateOrEditHomeArgs(
+        home: HomeEntity.empty(),
+        isNewHome: false,
       ),
     );
   }

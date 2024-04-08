@@ -8,6 +8,7 @@ import 'package:take_me_home/presentation/router/app_router.dart';
 import 'package:take_me_home/presentation/theme/color_themes.dart';
 
 void main() async {
+  // otherwise the app will crash
   WidgetsFlutterBinding.ensureInitialized();
 
   await Supabase.initialize(

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+/// A card containing [Widget]s that can be edited. (e.g. [TextField]s)
 class EditCard extends StatefulWidget {
   final Widget mainContent;
   final Icon? leadingIcon;

@@ -5,9 +5,11 @@ import 'package:take_me_home/presentation/bloc/home/home_bloc.dart';
 import 'package:take_me_home/presentation/router/app_router.dart';
 import 'package:take_me_home/presentation/router/args/create_or_edit_home_args.dart';
 import 'package:take_me_home/presentation/router/args/show_way_to_home_args.dart';
-import 'package:take_me_home/presentation/widgets/home_button_widget.dart';
+import 'package:take_me_home/presentation/widgets/widgets.dart';
 
-/// Shows all created homes.
+/// Shows all available homes.
+///
+/// When clicking on one of the homes, it shows the route to the home.
 class ShowHomesPage extends StatefulWidget {
   const ShowHomesPage({super.key});
 

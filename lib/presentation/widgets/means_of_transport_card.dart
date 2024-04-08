@@ -4,6 +4,7 @@ import 'package:take_me_home/domain/entities/station_entity.dart';
 import 'package:take_me_home/presentation/helper/icon_transformer.dart';
 import 'package:take_me_home/presentation/helper/time_transformer.dart';
 
+/// A card to display a [MeansOfTransportEntity].
 class MeansOfTransportCard extends StatefulWidget {
   final StationEntity station;
   final MeansOfTransportEntity meansOfTransport;

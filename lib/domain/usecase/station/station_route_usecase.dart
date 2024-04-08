@@ -5,6 +5,14 @@ import 'package:take_me_home/domain/entities/means_of_transport_entity.dart';
 import 'package:take_me_home/domain/entities/station_entity.dart';
 import 'package:take_me_home/domain/repository/station_repository.dart';
 
+/// Use case for getting the route between two stations. (start and end station)
+///
+/// Basic behaviour:
+/// - Get the means of transport for the [startStation] at the current time. (injected)
+/// - Get the means of transport for the [endStation] after a duration from the current time. (injected)
+/// - Add the stations and means of transport to the [_currentStations] and [_currentMeansOfTransport] lists.
+/// - Return true, when everything was successful. So you can know, that you can use the [_currentStations] and [_currentMeansOfTransport] lists.
+/// Not the best solution, but for the shitty API it's okay.
 class GetStationRouteUseCase {
   final StationRepository stationRepository;
   final List<StationEntity> _currentStations = [];
@@ -12,7 +20,7 @@ class GetStationRouteUseCase {
 
   GetStationRouteUseCase({required this.stationRepository});
 
-  // see: https://www.erfurter-bahn.de/fahrplaene-netze/fahrplaene-liniennetz/linie/re-12-rb-22-3
+  // see for the IDs: https://www.erfurter-bahn.de/fahrplaene-netze/fahrplaene-liniennetz/linie/re-12-rb-22-3
   final List<String> preferredTrainNamesPoessneck = [
     'RB 80875',
     'RB 80831',

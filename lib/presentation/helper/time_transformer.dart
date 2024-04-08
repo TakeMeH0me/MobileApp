@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+/// Transforms time for presentation layer or makes managing time easier.
 class TimeTransformer {
   static String toIso8601WithoutSeconds(TimeOfDay time) {
     return '${time.hour.toString().padLeft(2, '0')}:${time.minute.toString().padLeft(2, '0')}';

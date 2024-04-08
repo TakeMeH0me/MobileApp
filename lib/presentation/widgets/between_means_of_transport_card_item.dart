@@ -1,20 +1,22 @@
 import 'package:flutter/material.dart';
 
-class BetweenMeansOfTransportCardItem extends StatefulWidget {
+/// An item to show vertical dashed lines with extra information.
+///
+/// For now: The dashed lines are used together with the duration
+/// to show the duration of a means of transport.
+class VerticalDashedLines extends StatefulWidget {
   final Duration duration;
 
-  const BetweenMeansOfTransportCardItem({
+  const VerticalDashedLines({
     super.key,
     required this.duration,
   });
 
   @override
-  State<BetweenMeansOfTransportCardItem> createState() =>
-      _BetweenMeansOfTransportCardItemState();
+  State<VerticalDashedLines> createState() => _VerticalDashedLinesState();
 }
 
-class _BetweenMeansOfTransportCardItemState
-    extends State<BetweenMeansOfTransportCardItem> {
+class _VerticalDashedLinesState extends State<VerticalDashedLines> {
   final double listWidth = 5.0;
   final int dashedLinesCount = 4;
 

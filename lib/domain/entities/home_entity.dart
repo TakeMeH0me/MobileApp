@@ -2,7 +2,7 @@ import 'package:equatable/equatable.dart';
 import 'package:take_me_home/domain/entities/station_entity.dart';
 import 'package:uuid/uuid.dart';
 
-/// An instance of a home you wanna go to.
+/// An instance of a home or destination you wanna go to.
 class HomeEntity extends Equatable {
   final String id;
   final String name;

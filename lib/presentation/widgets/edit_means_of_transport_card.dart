@@ -3,6 +3,7 @@ import 'package:take_me_home/domain/entities/means_of_transport_entity.dart';
 import 'package:take_me_home/presentation/helper/icon_transformer.dart';
 import 'package:take_me_home/presentation/helper/time_transformer.dart';
 
+/// A card to edit a [MeansOfTransportEntity].
 class EditMeansOfTransportCard extends StatefulWidget {
   final MeansOfTransportEntity meansOfTransport;
   final Function(MeansOfTransportEntity) onEdit;

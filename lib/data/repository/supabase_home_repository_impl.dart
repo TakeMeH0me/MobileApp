@@ -6,6 +6,7 @@ import 'package:take_me_home/data/data_sources/home_remote_data_source.dart';
 import 'package:take_me_home/domain/entities/home_entity.dart';
 import 'package:take_me_home/domain/repository/home_repository.dart';
 
+/// Implementation of the [HomeRepository] interface.
 class SupabaseHomeRepositoryImpl implements HomeRepository {
   final SupabaseHomeRemoteDataSource remoteDataSource;
   final NetworkInfo networkInfo;

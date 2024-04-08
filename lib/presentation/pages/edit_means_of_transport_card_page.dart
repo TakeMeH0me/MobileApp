@@ -3,8 +3,15 @@ import 'package:flutter/services.dart';
 import 'package:take_me_home/domain/entities/means_of_transport_entity.dart';
 import 'package:take_me_home/presentation/helper/icon_transformer.dart';
 import 'package:take_me_home/presentation/router/args/edit_means_of_transport_card_args.dart';
-import 'package:take_me_home/presentation/widgets/edit_card.dart';
+import 'package:take_me_home/presentation/widgets/widgets.dart';
 
+/// Page for editing a means of transport card.
+/// It is needed, as the inofficial Deutsche Bahn API does not provide
+/// the means of transport for the whole route.
+///
+/// This is e. g. used to:
+/// - Edit the means of transport card before the route begins (e. g. to the train station)
+/// - Edit the means of transport card after the route ends (e. g. from the train station to home)
 class EditMeansOfTransportCardPage extends StatefulWidget {
   final MeansOfTransportEntity meansOfTransport;
   final Duration duration;

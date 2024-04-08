@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:take_me_home/domain/entities/home_entity.dart';
 
 /// Button for interacting with a home. E. g. edit it's properties
-/// or show all stopvers.
+/// or show all [MeansOfTransportEntity]s to this home.
 class HomeButton extends StatefulWidget {
   final Function() onPressed;
   final Function() onTrailingPressed;

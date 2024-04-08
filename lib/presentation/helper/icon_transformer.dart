@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:take_me_home/domain/entities/means_of_transport_entity.dart';
 
+/// Transforms stuff from the [MeansOfTransportEntity] class to presentation layer stuff.
 class MeansOfTransportTransportTransformer {
   static IconData getTypeAsIconData(MeansOfTransportType type) {
     switch (type) {
