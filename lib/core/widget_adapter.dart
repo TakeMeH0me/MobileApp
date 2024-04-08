@@ -1,5 +1,6 @@
 import 'package:take_me_home/domain/entities/means_of_transport_entity.dart';
-import 'package:take_me_home/widget_data_transfer_test_types.dart';
+import 'package:take_me_home/presentation/homewidget/route_information.dart';
+import 'package:take_me_home/presentation/homewidget/route_part.dart';
 
 class RouteInformationAdapter {
   static RouteInformation toRouteInformation(

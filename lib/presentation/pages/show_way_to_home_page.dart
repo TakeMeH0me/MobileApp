@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:home_widget/home_widget.dart';
@@ -61,7 +63,7 @@ class _ShowWayToHomePageState extends State<ShowWayToHomePage> {
                 const SizedBox(height: 10.0),
                 _buildTimeIndicator(),
                 const SizedBox(height: 10.0),
-                Expanded(child: _buildRouteList()),
+                _buildRouteList(),
               ],
             ),
           ),
@@ -81,13 +83,17 @@ class _ShowWayToHomePageState extends State<ShowWayToHomePage> {
         startTime: TimeOfDay.now(),
         endTime: TimeTransformer.addTime(
           TimeOfDay.now(),
-          const Duration(hours: 0, minutes: 30),
+          const Duration(hours: 0, minutes: 40),
         ),
       ),
     );
   }
 
   void updateRouteInformation(List<MeansOfTransportEntity>? mot) {
+    if (!Platform.isIOS) {
+      return;
+    }
+
     HomeWidget.setAppGroupId(MainApp.appGroupId);
     HomeWidget.saveWidgetData<String>(
       'routeinformation_json',
