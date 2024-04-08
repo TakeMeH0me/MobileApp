@@ -4,10 +4,9 @@
     <application
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher"
-        android:label="take_me_home"
-        android:enableOnBackInvokedCallback="true">
+        android:label="take_me_home">
         <receiver
-            android:name=".TakeMeHomeWidget"
+            android:name=".takeMeHomeWidget"
             android:exported="false">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
